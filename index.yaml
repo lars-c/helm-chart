@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  nginx-chart:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-10-29T14:18:04.872347201Z"
+    description: My First Helm Chart
+    digest: 496b0951575e6091f69f186048802f3f10e97d84f7bd42c2c583601773640962
+    maintainers:
+    - email: contact@devopscube.com
+      name: devopscube
+    name: nginx-chart
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.1/nginx-chart-0.1.1.tgz
+    version: 0.1.1
+generated: "2024-10-29T14:18:04.872358262Z"
