@@ -2,7 +2,7 @@ apiVersion: v2
 name: nginx-chart
 description: Tutorial nginx chart
 type: application
-version: 0.1.3
+version: 0.1.4
 appVersion: "1.16.0"
 icon: https://img.icons8.com/color/48/public--v1.png
 maintainers:
