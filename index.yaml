@@ -3,6 +3,20 @@ entries:
   nginx-chart:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-10-30T14:37:16.212452692Z"
+    description: Tutorial nginx chart
+    digest: a376c7bb5b64b90fee330e0d40550ac3944e420be77ca04cfd00ee85b3eede54
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: postmaster@inetpub.dk
+      name: lars-c
+    name: nginx-chart
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.4/nginx-chart-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-10-30T11:25:23.371961527Z"
     description: Tutorial nginx chart
     digest: 00b828f6fc64eb9e2340b36fc3b57007d3a80de31ab944006fcff37ce7af5000
@@ -41,4 +55,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.1/nginx-chart-0.1.1.tgz
     version: 0.1.1
-generated: "2024-10-30T11:25:23.371974381Z"
+generated: "2024-10-30T14:37:16.212463322Z"
