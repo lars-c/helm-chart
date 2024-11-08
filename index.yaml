@@ -11,6 +11,21 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/demo-chart-test-0.1.1/demo-chart-test-0.1.1.tgz
     version: 0.1.1
+  mysql-basic:
+  - apiVersion: v2
+    appVersion: 9.1.0
+    created: "2024-11-08T14:32:22.364384416Z"
+    description: Test MySQL Helm chart
+    digest: 208730b9f925998fc3a81ba2e820660f1e2c0e6c20c1b75a60b4c71e2b23a73b
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: mysql-basic
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mysql-basic-0.1.0/mysql-basic-0.1.0.tgz
+    version: 0.1.0
   nginx-chart:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -26,4 +41,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.0/nginx-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2024-11-08T12:48:05.957675368Z"
+generated: "2024-11-08T14:32:22.364394435Z"
