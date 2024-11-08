@@ -11,4 +11,19 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/demo-chart-test-0.1.1/demo-chart-test-0.1.1.tgz
     version: 0.1.1
-generated: "2024-11-08T10:36:16.843580284Z"
+  nginx-chart:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-11-08T12:48:05.957646353Z"
+    description: nginx helm chart for testing
+    digest: d04f07ddb122a5d6264e31484660c9d869553cb30b5712d0be31142a33c5f152
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: lars-c@inetpub.dk
+      name: lars-c
+    name: nginx-chart
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.0/nginx-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-11-08T12:48:05.957675368Z"
