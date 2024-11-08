@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla-mysql
+  labels:
+    app: joomla
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:9.1.0
+        name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql
+              key: mysql_database
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              name: mysql
+              key: mysql_timezone
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: joomla-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes: 
+      - name: joomla-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: joomla-mysql-pv-claim
