@@ -3,7 +3,7 @@ name: mysql-basic
 description: Test MySQL Helm chart
 
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "9.1.0"
 
 icon: https://img.icons8.com/color/48/public--v1.png
