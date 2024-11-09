@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql
+  name: joomla
 data:
   joomla_db_host: "mysql-host"
-  mysql_database: "joomla_12"
+  mysql_database: "mysql_12"
   mysql_timezone: "Europe/Copenhagen"
