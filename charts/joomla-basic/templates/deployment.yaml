@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla
+  labels:
+    app: joomla
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: frontend
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: joomla
+        env:
+        - name: JOOMLA_DB_HOST
+          value: {{ include "joomla.mysql.databaseHost" . }}
+        - name: ALLOW_EMPTY_PASSWORD
+          value: {{ .Values.allowEmptyPassword . }}
+        - name: JOOMLA_USERNAME
+          value: {{ default "" .Values.joomlaUsername | quote }}
+        # Joomla user password
+        - name: JOOMLA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: joomla-secret
+              key: joomla-password
+        # Joomla user email
+        - name: JOOMLA_EMAIL
+          value: {{ default "" .Values.joomlaEmail | quote }}
+        # 
+        - name: JOOMLA_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: joomla
+              key: joomla_db_host
+        # 
+        - name: JOOMLA_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: joomla
+              key: mysql_database
+        - name: JOOMLA_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        ports:
+        - containerPort: 80
+          name: joomla
+        volumeMounts:
+        - name: joomla-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: joomla-persistent-storage
+        persistentVolumeClaim:
+          claimName: joomla-pv-claim

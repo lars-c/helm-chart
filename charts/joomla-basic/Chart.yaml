@@ -1,0 +1,15 @@
+apiVersion: v2
+name: joomla-basic
+description: Basic Helm chart for Joomla
+version: 0.1.0
+appVersion: "1.16.0"
+
+dependencies:
+- name: mysql
+  version: "9.1.0"
+  repository: "file://charts/mysql"
+
+icon: https://img.icons8.com/color/48/public--v1.png
+maintainers:
+- email: larsc@inetpub.dk
+  name: lars-c

@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla-mysql
+  labels:
+    app: joomla
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: mysql
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: mysql
+        env:
+        - name: MYSQL_HELPER
+          value: {{ include "mysql.rootPassword" . }}
+        - name: MYSQL_DATABASE
+          value: {{ .Values.auth.database }}
+        - name: MYSQL_USER
+          value: {{ .Values.auth.username }}   
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        - name: MYSQL_RANDOM_ROOT_PASSWORD
+          value: {{ .Values.auth.mysqlRandomRootPassword }}
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: rootpassword
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              name: joomla
+              key: mysql_timezone
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: joomla-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes: 
+      - name: joomla-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: joomla-mysql-pv-claim
