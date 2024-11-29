@@ -22,17 +22,15 @@ spec:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         name: mysql
         env:
-        - name: MYSQL_HELPER
-          value: {{ include "mysql.rootPassword" . }}
         - name: MYSQL_DATABASE
-          value: {{ .Values.auth.database }}
+          value: {{ .Values.global.dbname }}
         - name: MYSQL_USER
-          value: {{ .Values.auth.username }}   
+          value: {{ .Values.global.dbuser }}
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-secret
-              key: password
+              key: dbpassword
         - name: MYSQL_RANDOM_ROOT_PASSWORD
           value: {{ .Values.auth.mysqlRandomRootPassword }}
         - name: MYSQL_ROOT_PASSWORD
@@ -40,6 +38,7 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: rootpassword
+        - name: MYSQL_ROOT_PASSWORD 
         - name: TZ
           valueFrom:
             configMapKeyRef:

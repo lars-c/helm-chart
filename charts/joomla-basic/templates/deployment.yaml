@@ -24,38 +24,30 @@ spec:
         env:
         - name: JOOMLA_DB_HOST
           value: {{ include "joomla.mysql.databaseHost" . }}
-        - name: ALLOW_EMPTY_PASSWORD
-          value: {{ .Values.allowEmptyPassword . }}
-        - name: JOOMLA_USERNAME
-          value: {{ default "" .Values.joomlaUsername | quote }}
-        # Joomla user password
-        - name: JOOMLA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: joomla-secret
-              key: joomla-password
-        # Joomla user email
-        - name: JOOMLA_EMAIL
-          value: {{ default "" .Values.joomlaEmail | quote }}
-        # 
-        - name: JOOMLA_DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: joomla
-              key: joomla_db_host
-        # 
         - name: JOOMLA_DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: joomla
-              key: mysql_database
+          value: {{ .Values.global.dbname }}
+        - name: JOOMLA_DB_USER
+          value: {{ .Values.global.dbuser }}
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
-              key: password
+              name: joomla-secret
+              key: dbpassword
+        - name: JOOMLA_SITE_NAME
+          value: {{ .Values.joomlaSitename }}
+        - name: JOOMLA_ADMIN_USER
+          value: {{ .Values.joomlaAdminName }}
+        - name: JOOMLA_ADMIN_USERNAME
+          value: {{ .Values.joomlaAdminUserame }}
+        - name: JOOMLA_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: joomla-secret
+              key: joomlaAdminPassword
+        - name: JOOMLA_EMAIL
+          value: {{ default "" .Values.joomlaAdminEmail }}
         ports:
-        - containerPort: 80
+        - containerPort: {{ .Values.service.port }}
           name: joomla
         volumeMounts:
         - name: joomla-persistent-storage

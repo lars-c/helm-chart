@@ -2,6 +2,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Sahred db user/password between joomla and mysql
+##
+global:
+  dbname: "global_parent_db_name"
+  dbuser: "global_parent_dbuser"
+  dbpassword: "gobal_dbuser_password"
+
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
 
@@ -19,19 +26,24 @@ imagePullSecrets: []
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
-## @param joomlaUsername User of the application
+## Joomla site name
 ##
-joomlaUsername: user
-## @param joomlaPassword Application password
-## Defaults to a random 10-character alphanumeric string if not set
+joomlaSitename: "parent_joomla_sitename"
+## Joomla admin user real name (skip with manual installation)
 ##
-joomlaPassword: ""
-## @param joomlaEmail Admin email
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/joomla#configuration
+joomlaAdminName: "Joomla_admin_user_real_name"
+## Joomla admin user name
 ##
-joomlaEmail: user@test.com
+joomlaAdminUserame: "Joomla_admin_username"
+## Joomla admin user password
+## Defaults to a random 16-character alphanumeric string if not set
+##
+joomlaAdminPassword: ""
+## Admin user email
+##
+joomlaAdminEmail: user@test.com
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/joomla#environment-variables
+## 
 
 persistence:
   enabled: true
@@ -186,24 +198,13 @@ mysql:
   ##
   enabled: true
   # MySQL database hostname
-
-
   auth:
-    ## mysql.auth.allowEmptyPassword Allow DB blank passwords
-    ##
-    allowEmptyPassword: "no"
-    ## mysql.auth.rootPassword Password for the MySQL `root` user
+    ## Password for the MySQL root user
     rootpassword: "password"
-    ## mysql.auth.database Database name to create    
-    ##
-    database: "joomla_db_value"
-    ## Database user
-    ##
-    username: "karen_value"
     ## 
     ## mysql.auth.password Password for the database
     ##
-    password: password_values
+    password: password
     ## Random initial password for `root` superuser `GENERATED ROOT PASSWORD: ...`
     ## Required value 'yes'
     mysqlRandomRootPassword: false

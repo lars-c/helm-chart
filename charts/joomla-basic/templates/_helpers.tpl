@@ -17,4 +17,14 @@ Return the MySQL Hostname
 {{- end -}}
 {{- end -}}
 
-
+{{/*
+Return the joomla db user password
+*/}}
+{{- define "mysql.password" -}}
+{{- if .Values.auth.password }}
+    {{- printf .Values.auth.password | b64enc | quote -}}
+{{- else -}}
+    {{- $password := randAlphaNum 16 -}}
+    {{- printf $password | quote -}}
+{{- end -}}
+{{- end -}}
