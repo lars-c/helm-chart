@@ -3,12 +3,13 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: joomla-pv-claim
+  namespace: joomla
   labels:
     app: joomla
 spec:
-  storageClassName: {{ .Values.persistence.storageClass }} 
+  storageClassName: local-path
   accessModes:
-    - {{ .Values.persistence.accessModes }} 
+    - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.persistence.size }} 
+      storage: 1Gi

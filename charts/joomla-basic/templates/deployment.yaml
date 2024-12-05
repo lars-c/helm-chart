@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: joomla
+  namespace: joomla
   labels:
     app: joomla
 spec:
@@ -19,35 +20,26 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+      - image: joomla:php8.3-apache
         name: joomla
         env:
         - name: JOOMLA_DB_HOST
-          value: {{ include "joomla.mysql.databaseHost" . }}
+          valueFrom:
+            configMapKeyRef:
+              name: joomla
+              key: joomla_db_host
         - name: JOOMLA_DB_NAME
-          value: {{ .Values.global.dbname }}
-        - name: JOOMLA_DB_USER
-          value: {{ .Values.global.dbuser }}
+          valueFrom:
+            configMapKeyRef:
+              name: joomla
+              key: mysql_database
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: joomla-secret
-              key: dbpassword
-        - name: JOOMLA_SITE_NAME
-          value: {{ .Values.joomlaSitename }}
-        - name: JOOMLA_ADMIN_USER
-          value: {{ .Values.joomlaAdminName }}
-        - name: JOOMLA_ADMIN_USERNAME
-          value: {{ .Values.joomlaAdminUserame }}
-        - name: JOOMLA_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: joomla-secret
-              key: joomlaAdminPassword
-        - name: JOOMLA_EMAIL
-          value: {{ default "" .Values.joomlaAdminEmail }}
+              key: password
         ports:
-        - containerPort: {{ .Values.service.port }}
+        - containerPort: 80
           name: joomla
         volumeMounts:
         - name: joomla-persistent-storage

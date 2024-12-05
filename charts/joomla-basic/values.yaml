@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-## Sahred db user/password between joomla and mysql
+## Sahred db name/user/password between joomla and mysql
 ##
 global:
   dbname: "global_parent_db_name"
@@ -28,7 +28,7 @@ nameOverride: ""
 fullnameOverride: ""
 ## Joomla site name
 ##
-joomlaSitename: "parent_joomla_sitename"
+joomlaSitename: "joomla"
 ## Joomla admin user real name (skip with manual installation)
 ##
 joomlaAdminName: "Joomla_admin_user_real_name"
@@ -38,15 +38,15 @@ joomlaAdminUserame: "Joomla_admin_username"
 ## Joomla admin user password
 ## Defaults to a random 16-character alphanumeric string if not set
 ##
-joomlaAdminPassword: ""
+joomlaAdminPassword: "password"
 ## Admin user email
 ##
-joomlaAdminEmail: user@test.com
+joomlaAdminEmail: "user@test.com"
 ## @param allowEmptyPassword Allow DB blank passwords
 ## 
 
 persistence:
-  enabled: true
+  enabled: "true"
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
@@ -193,20 +193,16 @@ mysql:
     pullPolicy: IfNotPresent
   ## Set to true if you would like to see extra information on logs
   ##
-  debug: false
+  port: "3306"
   ## mysql.enabled Deploy a mysql server
   ##
   enabled: true
   # MySQL database hostname
   auth:
     ## Password for the MySQL root user
-    rootpassword: "password"
+    rootpassword: "qKhXe57vZWQ8qw"
     ## 
-    ## mysql.auth.password Password for the database
-    ##
-    password: password
-    ## Random initial password for `root` superuser `GENERATED ROOT PASSWORD: ...`
-    ## Required value 'yes'
+    ## Ignored
     mysqlRandomRootPassword: false
     ## rootPassword Password for the MySQL `root` user
     ##
