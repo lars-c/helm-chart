@@ -6,8 +6,8 @@
 ##
 global:
   dbname: "global_parent_db_name"
-  dbuser: "global_parent_dbuser"
-  dbpassword: "gobal_dbuser_password"
+  dbuser: "dbuser"
+  dbpassword: "dbpassword"
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1

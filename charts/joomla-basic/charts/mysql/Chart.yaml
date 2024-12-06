@@ -3,10 +3,16 @@ name: mysql
 description: MySQL Helm subchart for Joomla
 
 type: application
-version: 0.1.0
-appVersion: "9.1.0"
+version: 1.0.0
+appVersion: "5.7.0"
+
+dependencies:
+  - name: common
+    version: 1.0.0
+    repository: "file://../common"
 
 icon: https://img.icons8.com/color/48/public--v1.png
 maintainers:
 - email: larsc@inetpub.dk
   name: lars-c
+

@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: joomla
+  name1: {{ include "common.mysql.rootpassword" . }}
   namespace: joomla
   labels:
     app: joomla
