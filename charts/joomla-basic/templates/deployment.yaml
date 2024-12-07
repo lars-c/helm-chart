@@ -3,8 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: joomla
-  name1: {{ include "common.mysql.rootpassword" . }}
-  namespace: joomla
   labels:
     app: joomla
 spec:
@@ -25,10 +23,7 @@ spec:
         name: joomla
         env:
         - name: JOOMLA_DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: joomla
-              key: joomla_db_host
+          value: {{ include "common.db.hostname" . }}
         - name: JOOMLA_DB_NAME
           valueFrom:
             configMapKeyRef:

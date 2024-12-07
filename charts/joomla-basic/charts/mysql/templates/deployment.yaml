@@ -4,7 +4,6 @@ kind: Deployment
 metadata:
   name: joomla-mysql
   name1: {{ include "common.mysql.rootpassword" . }}
-  namespace: joomla
   labels:
     app: joomla
 spec:
@@ -24,6 +23,8 @@ spec:
       - image: mysql:5.7
         name: mysql
         env:
+        - name: MYSQL_HOST
+          value: {{ include "common.db.hostname" . }}
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:

@@ -8,6 +8,8 @@ global:
   dbname: "global_parent_db_name"
   dbuser: "dbuser"
   dbpassword: "dbpassword"
+  ## JOOMLA_DB_HOST
+  joomlaDbHost: "joomla-mysql"
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
@@ -26,12 +28,13 @@ imagePullSecrets: []
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
+##
 ## Joomla site name
-##
 joomlaSitename: "joomla"
-## Joomla admin user real name (skip with manual installation)
 ##
+## Joomla admin user real name (skip with manual installation)
 joomlaAdminName: "Joomla_admin_user_real_name"
+##
 ## Joomla admin user name
 ##
 joomlaAdminUserame: "Joomla_admin_username"
@@ -194,24 +197,4 @@ mysql:
   ## Set to true if you would like to see extra information on logs
   ##
   port: "3306"
-  ## mysql.enabled Deploy a mysql server
-  ##
-  enabled: true
-  # MySQL database hostname
-  auth:
-    ## Password for the MySQL root user
-    rootpassword: "qKhXe57vZWQ8qw"
-    ## 
-    ## Ignored
-    mysqlRandomRootPassword: false
-    ## rootPassword Password for the MySQL `root` user
-    ##
-
-externalDatabase:
-  ## @param externalDatabase.existingSecret Name of the database existing Secret Object
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  ##
-  existingSecret: ""
-  ## @param externalDatabase.host Host of the existing database
-  ##
-  host: "external_mysql_host"
+  
