@@ -5,5 +5,5 @@ metadata:
   name: mysql
 data:
   joomla_db_host: "joomla-mysql"
-  mysql_database: "joomla_12"
-  mysql_timezone: "Europe/Copenhagen"
+  #mysql_database: "joomla_12"
+  #mysql_timezone: "Europe/Copenhagen"

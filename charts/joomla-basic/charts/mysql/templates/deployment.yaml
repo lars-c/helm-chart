@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: joomla-mysql
-  name1: {{ include "common.mysql.rootpassword" . }}
   labels:
     app: joomla
 spec:
@@ -20,26 +19,21 @@ spec:
         tier: mysql
     spec:
       containers:
-      - image: mysql:5.7
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: mysql
         env:
         - name: MYSQL_HOST
           value: {{ include "common.db.hostname" . }}
         - name: MYSQL_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: mysql
-              key: mysql_database
+          value: {{ include "common.dbname" . }}
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-secret
               key: password
         - name: TZ
-          valueFrom:
-            configMapKeyRef:
-              name: mysql
-              key: mysql_timezone
+          value: {{ .Values.timezone }}
         ports:
         - containerPort: 3306
           name: mysql

@@ -19,16 +19,14 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: joomla:php8.3-apache
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: joomla
         env:
         - name: JOOMLA_DB_HOST
           value: {{ include "common.db.hostname" . }}
         - name: JOOMLA_DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: joomla
-              key: mysql_database
+          value: {{ include "common.dbname" . }}
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:

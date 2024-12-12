@@ -10,13 +10,23 @@ Return MYSQL_ROOT_PASSWORD value
 {{- end -}}
 
 {{/*
-Return DBHOST NAME value
-JOOMLA_DB_HOST / MYSQL_HOST
+Return DBHOST NAME value (JOOMLA_DB_HOST / MYSQL_HOST)
 */}}
 {{- define "common.db.hostname" -}}
 {{- if .Values.global.joomlaDbHost }}
     {{- printf .Values.global.joomlaDbHost | quote -}}
 {{- else -}}
     {{- printf "joomla-mysql" | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return DB NAME value (JOOMLA_DB_NAME MYSQL_DATABASE)
+*/}} 
+{{- define "common.dbname" -}}
+{{- if .Values.global.dbname }}
+    {{- printf .Values.global.dbname | quote -}}
+{{- else -}}
+    {{- printf "joomla-cms" | quote -}}
 {{- end -}}
 {{- end -}}

@@ -5,14 +5,16 @@
 ## Sahred db name/user/password between joomla and mysql
 ##
 global:
-  dbname: "global_parent_db_name"
+  ## JOOMLA_DB_NAME
+  dbname: "joomla_12"
+  ## 
   dbuser: "dbuser"
+  ##
+  ## OOMLA_DB_PASSWORD / MYSQL_ROOT_PASSWORD
   dbpassword: "dbpassword"
+  ##
   ## JOOMLA_DB_HOST
   joomlaDbHost: "joomla-mysql"
-
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
@@ -29,17 +31,18 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 ##
-## Joomla site name
-joomlaSitename: "joomla"
+## Joomla site name (skip with manual installation)
 ##
+joomlaSitename: "joomla"
 ## Joomla admin user real name (skip with manual installation)
+##
 joomlaAdminName: "Joomla_admin_user_real_name"
 ##
-## Joomla admin user name
+## Joomla admin user name (skip with manual installation)
 ##
 joomlaAdminUserame: "Joomla_admin_username"
-## Joomla admin user password
-## Defaults to a random 16-character alphanumeric string if not set
+##
+## Joomla admin user password (skip with manual installation)
 ##
 joomlaAdminPassword: "password"
 ## Admin user email
@@ -102,23 +105,20 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# 443 This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+# This is for setting up a service
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  # This sets the service type NodePort LoadBalancer
   type: LoadBalancer
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  # This sets the ports
   port: 80
   ##
   nodePorts:
     http: ""
     https: ""
-  ## @param service.clusterIP Joomla! service Cluster IP
-  ## e.g.:
-  ## clusterIP: None
+  ## service Cluster IP
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP loadBalancerIP for the Joomla Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ## loadBalancerIP for the Joomla Service (optional, cloud specific)
   ##
   loadBalancerIP: "192.168.1.76"
 
@@ -192,9 +192,12 @@ mysql:
   # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
   image:
     repository: mysql
-    tag: "9.1.0"
+    tag: "5.7"
     pullPolicy: IfNotPresent
   ## Set to true if you would like to see extra information on logs
   ##
   port: "3306"
+  ##
+  ## Tiemzone
+  timezone: "Europe/Copenhagen"
   
