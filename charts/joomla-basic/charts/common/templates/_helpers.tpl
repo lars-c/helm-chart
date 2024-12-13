@@ -2,6 +2,17 @@
 Return MYSQL_ROOT_PASSWORD value
 */}}
 {{- define "common.mysql.rootpassword" -}}
+{{- if .Values.auth.rootdbpassword }}
+    {{- printf .Values.auth.rootdbpassword | b64enc -}}
+{{- else -}}
+    {{- printf (randAlphaNum 16) | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
+*/}}
+{{- define "common.global.dbpassword" -}}
 {{- if .Values.global.dbpassword }}
     {{- printf .Values.global.dbpassword | b64enc -}}
 {{- else -}}
@@ -27,6 +38,17 @@ Return DB NAME value (JOOMLA_DB_NAME MYSQL_DATABASE)
 {{- if .Values.global.dbname }}
     {{- printf .Values.global.dbname | quote -}}
 {{- else -}}
-    {{- printf "joomla-cms" | quote -}}
+    {{- printf "joomla-db" | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return DB USER value (JOOMLA_DB_USER)
+*/}} 
+{{- define "common.dbuser" -}}
+{{- if .Values.global.dbuser }}
+    {{- printf .Values.global.dbuser | quote -}}
+{{- else -}}
+    {{- printf "joomla" | quote -}}
 {{- end -}}
 {{- end -}}

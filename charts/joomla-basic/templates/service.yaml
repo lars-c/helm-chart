@@ -8,9 +8,14 @@ metadata:
   annotations:
     #metallb.universe.tf/address-pool: test-pool
 spec:
+  type: {{ .Values.service.type }}
   ports:
-    - port: 80
+    - port: {{ .Values.service.port | quote }}
   selector:
     app: joomla
-  type: LoadBalancer
-  loadBalancerIP: 192.168.1.76
+  {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
+  {{- if and .Values.service.loadBalancerIP (eq .Values.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}

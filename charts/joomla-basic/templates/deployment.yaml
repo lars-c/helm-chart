@@ -27,11 +27,13 @@ spec:
           value: {{ include "common.db.hostname" . }}
         - name: JOOMLA_DB_NAME
           value: {{ include "common.dbname" . }}
+        - name: JOOMLA_DB_USER
+          value: {{ include "common.dbuser" . }}
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: joomla-secret
-              key: password
+              key: dbpassword
         ports:
         - containerPort: 80
           name: joomla

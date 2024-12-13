@@ -27,15 +27,22 @@ spec:
           value: {{ include "common.db.hostname" . }}
         - name: MYSQL_DATABASE
           value: {{ include "common.dbname" . }}
+        - name: MYSQL_USER
+          value: {{ include "common.dbuser" . }}
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: dbpassword
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-secret
-              key: password
+              key: rootdbpassword
         - name: TZ
-          value: {{ .Values.timezone }}
+          value: {{ .Values.timezone | quote }}
         ports:
-        - containerPort: 3306
+        - containerPort: {{ .Values.port }}
           name: mysql
         volumeMounts:
         - name: joomla-mysql-persistent-storage

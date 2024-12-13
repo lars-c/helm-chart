@@ -6,9 +6,9 @@
 ##
 global:
   ## JOOMLA_DB_NAME
-  dbname: "joomla_12"
+  dbname: "joomla_db"
   ## 
-  dbuser: "dbuser"
+  dbuser: "joomla"
   ##
   ## OOMLA_DB_PASSWORD / MYSQL_ROOT_PASSWORD
   dbpassword: "dbpassword"
@@ -54,10 +54,6 @@ joomlaAdminEmail: "user@test.com"
 persistence:
   enabled: "true"
   ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
   ##
   storageClass: "local-path"
   accessModes: "ReadWriteOnce"
@@ -107,7 +103,7 @@ securityContext: {}
 
 # This is for setting up a service
 service:
-  # This sets the service type NodePort LoadBalancer
+  # This sets the service type: NodePort LoadBalancer clusterIP
   type: LoadBalancer
   # This sets the ports
   port: 80
@@ -117,7 +113,7 @@ service:
     https: ""
   ## service Cluster IP
   ##
-  clusterIP: ""
+  clusterIP:
   ## loadBalancerIP for the Joomla Service (optional, cloud specific)
   ##
   loadBalancerIP: "192.168.1.76"
@@ -195,6 +191,10 @@ mysql:
     tag: "5.7"
     pullPolicy: IfNotPresent
   ## Set to true if you would like to see extra information on logs
+  ##
+  auth:
+    ## MYSQL_ROOT_PASS
+    rootdbpassword: "password123"
   ##
   port: "3306"
   ##

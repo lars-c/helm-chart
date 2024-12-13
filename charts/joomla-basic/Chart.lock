@@ -1,0 +1,9 @@
+dependencies:
+- name: common
+  repository: file://./charts/common
+  version: 1.0.0
+- name: mysql
+  repository: file://./charts/mysql
+  version: 1.0.0
+digest: sha256:a9207f897d6aa6cb2454026cf884bd45a6405f1fb365d9cfb26e57b12a43eeca
+generated: "2024-12-13T14:42:44.819864919+01:00"
