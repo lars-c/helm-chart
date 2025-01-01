@@ -27,6 +27,8 @@ spec:
           value: {{ include "common.db.hostname" . }}
         - name: JOOMLA_DB_NAME
           value: {{ include "common.dbname" . }}
+        - name: JOOMLA_DATABASE_PORT_NUMBER
+          value: {{ include "common.joomlaDbPort" . }}
         - name: JOOMLA_DB_USER
           value: {{ include "common.dbuser" . }}
         - name: JOOMLA_DB_PASSWORD
@@ -37,6 +39,17 @@ spec:
         ports:
         - containerPort: 80
           name: joomla
+        {{- if .Values.startupProbe.enabled }}
+        startupProbe:
+          httpGet:
+            path: /index.php
+            port: joomla
+          initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.startupProbe.successThreshold }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+        {{- end }}
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html

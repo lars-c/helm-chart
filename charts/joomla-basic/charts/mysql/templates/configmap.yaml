@@ -4,6 +4,6 @@ kind: ConfigMap
 metadata:
   name: mysql
 data:
-  joomla_db_host: "joomla-mysql"
+  #joomla_db_host: "joomla-mysql"
   #mysql_database: "joomla_12"
   #mysql_timezone: "Europe/Copenhagen"

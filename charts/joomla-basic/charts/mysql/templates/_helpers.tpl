@@ -1,6 +1,6 @@
 
 {{/*
-Return the MySQL root password
+Return the MySQL root password (not used)
 */}}
 {{- define "mysql.rootPassword" -}}
 {{- if .Values.auth.rootpassword }}
@@ -12,7 +12,7 @@ Return the MySQL root password
 {{- end -}}
 
 {{/*
-Return the MySQL user password
+Return the MySQL user password (not used)
 */}}
 {{- define "mysql.password" -}}
 {{- if .Values.auth.password }}
@@ -20,5 +20,18 @@ Return the MySQL user password
 {{- else -}}
     {{- $password := randAlphaNum 16 -}}
     {{- printf $password | quote -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
+Return the MySQL port 
+If match in deployment and service
+*/}}
+{{- define "mysql.port" -}}
+{{- if .Values.port }}
+    {{- printf .Values.port -}}
+{{- else -}}
+    {{- printf 3306 -}}
 {{- end -}}
 {{- end -}}

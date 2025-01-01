@@ -1,8 +1,14 @@
 <!--- app-name: Joomla! -->
 <!-- markdownlint-disable-next-line MD026 -->
-# Basic Helm chart for Joomla!
+# Basic test chart for Joomla
 
 [Joomla!](http://www.joomla.org/)
+
+## For testing and educational purpose only
+
+```txt
+Chart properly include configuration errors and omissions. Documentation is incomplete and/or misleading. Purpose of this chart is testing only.
+```
 
 ## Installing the Chart
 

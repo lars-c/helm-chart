@@ -10,7 +10,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port | quote }}
+    - port: 80
   selector:
     app: joomla
   {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}

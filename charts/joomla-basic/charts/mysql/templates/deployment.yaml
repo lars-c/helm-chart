@@ -27,6 +27,8 @@ spec:
           value: {{ include "common.db.hostname" . }}
         - name: MYSQL_DATABASE
           value: {{ include "common.dbname" . }}
+        - name: MYSQL_TCP_PORT
+          value: {{ include "common.joomlaDbPort" . }}
         - name: MYSQL_USER
           value: {{ include "common.dbuser" . }}
         - name: MYSQL_PASSWORD
@@ -42,7 +44,7 @@ spec:
         - name: TZ
           value: {{ .Values.timezone | quote }}
         ports:
-        - containerPort: {{ .Values.port }}
+        - containerPort: 3306
           name: mysql
         volumeMounts:
         - name: joomla-mysql-persistent-storage

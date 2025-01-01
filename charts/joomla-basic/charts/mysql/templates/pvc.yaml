@@ -6,9 +6,9 @@ metadata:
   labels:
     app: joomla
 spec:
-  storageClassName: local-path
+  storageClassName: {{ .Values.persistence.storageClass | quote }}
   accessModes:
-    - ReadWriteOnce
+    - {{ .Values.persistence.accessModes }}
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.persistence.size }}

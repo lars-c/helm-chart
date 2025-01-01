@@ -4,5 +4,5 @@ kind: ConfigMap
 metadata:
   name: joomla
 data:
-  joomla_db_host: "joomla-mysql"
+  #joomla_db_host: "joomla-mysql"
   #mysql_database: "joomla_12"
