@@ -147,40 +147,24 @@ resources: {}
   #   memory: 128Mi
 
 ## This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-## Enable startupProbe
-## Initial delay seconds for startupProbe
-## Period seconds for startupProbe
-## Timeout seconds for startupProbe
-## Failure threshold for startupProbe
-## Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 600
   periodSeconds: 20
   timeoutSeconds: 10
   successThreshold: 1
   failureThreshold: 3
 ## Enable livenessProbe
-## Initial delay seconds for livenessProbe
-## Period seconds for livenessProbe
-## Timeout seconds for livenessProbe
-## Failure threshold for livenessProbe
-## Success threshold for livenessProbe
 ##
 livenessProbe:
-  enabled: true
+  enabled: false
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
 ## Enable readinessProbe
-## Initial delay seconds for readinessProbe
-## Period seconds for readinessProbe
-## Timeout seconds for readinessProbe
-## Failure threshold for readinessProbe
-## Success threshold for readinessProbe
 ##
 readinessProbe:
   enabled: true
@@ -189,7 +173,7 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
-
+##
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
   enabled: false
@@ -227,22 +211,15 @@ mysql:
   auth:
     ## MYSQL_ROOT_PASS
     rootdbpassword: "bxJK8Q1wd9ZFeDO8bOKbQ9CN"
-  ## MySQL database port number is handled by the global.joomlaDbPort
-  ##port: "3306"
   ##
   ## Tiemzone
   timezone: "Europe/Copenhagen"
   ##
   persistence:
-    ## enabled: "true"
-    ## If defined, storageClassName: <storageClass>
     ##
     storageClass: "local-path"
     ##
     accessModes: "ReadWriteOnce"
     size: 2Gi
-    ## Requires persistence.enabled: true
-    ## PVC must be created manually before volume will be bound
-    ##
-    ## existingClaim: ""
+
   

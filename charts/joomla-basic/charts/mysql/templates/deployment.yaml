@@ -44,7 +44,7 @@ spec:
         - name: TZ
           value: {{ .Values.timezone | quote }}
         ports:
-        - containerPort: 3306
+        - containerPort: {{ include "joomla.service.port" . }}
           name: mysql
         volumeMounts:
         - name: joomla-mysql-persistent-storage

@@ -50,6 +50,27 @@ spec:
           successThreshold: {{ .Values.startupProbe.successThreshold }}
           failureThreshold: {{ .Values.startupProbe.failureThreshold }}
         {{- end }}
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+            tcpSocket:
+              port: joomla
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+            httpGet:
+              path: /index.php
+              port: joomla
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+        {{- end }}
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html
