@@ -32,12 +32,12 @@ image:
 ## @param hostAliases [array] Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-hostAliases:
-  ## Necessary for apache-exporter to work
-  ##
-  - ip: "127.0.0.1"
-    hostnames:
-      - "status.localhost"
+# hostAliases:
+#   ## Necessary for apache-exporter to work
+#   ##
+#   - ip: "127.0.0.1"
+#     hostnames:
+#       - "status.localhost"
 #
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
