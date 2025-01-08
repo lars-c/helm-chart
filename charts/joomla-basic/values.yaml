@@ -47,21 +47,21 @@ fullnameOverride: ""
 ##
 ## Joomla site name (skip with manual installation)
 ##
-joomlaSitename: "joomla"
+#joomlaSitename: "joomla"
 ## Joomla admin user real name (skip with manual installation)
 ##
-joomlaAdminName: "Joomla_admin_user_real_name"
+#joomlaAdminName: "Joomla_admin_user_real_name"
 ##
 ## Joomla admin user name (skip with manual installation)
 ##
-joomlaAdminUserame: "Joomla_admin_username"
+#joomlaAdminUserame: "Joomla_admin_username"
 ##
 ## Joomla admin user password (skip with manual installation)
 ##
-joomlaAdminPassword: "password"
+#joomlaAdminPassword: "password"
 ## Admin user email
 ##
-joomlaAdminEmail: "user@test.com"
+#joomlaAdminEmail: "user@test.com"
 ## @param allowEmptyPassword Allow DB blank passwords
 ## 
 
@@ -122,10 +122,10 @@ service:
   # This sets the external port
   port: 80
   ##
-  clusterIP:
-  ## loadBalancerIP for the Joomla Service (optional, cloud specific)
+  #clusterIP:
+  ## loadBalancerIP for the Joomla Service
   ##
-  loadBalancerIP: "192.168.1.76"
+  loadBalancerIP: ""
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
