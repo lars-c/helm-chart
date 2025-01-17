@@ -43,7 +43,6 @@ spec:
               key: rootdbpassword
         - name: TZ
           value: {{ .Values.timezone | quote }}
-        ports:
         - containerPort: {{ include "mysql.joomlaDbPort" . }}
           name: mysql
         volumeMounts:
@@ -53,3 +52,21 @@ spec:
       - name: joomla-mysql-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-mysql-pv-claim
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - pink
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - green
+          

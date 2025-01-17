@@ -204,13 +204,36 @@ volumeMounts: []
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
-
+#
 nodeSelector: {}
-
+#
 tolerations: []
-
-affinity: {}
-
+#
+affinity:
+  enabled: true
+  preferred: true
+  required: false
+  #
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 10
+      key: color
+      operator: In
+      values:
+        - pink
+    - weight: 20
+      key: color
+      operator: In
+      values:
+        - green
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - key: color
+      operator: In
+      values:
+        - pink
+    - key: color
+      operator: In
+      values:
+        - green
 mysql:
   ## This sets the container image for MySQL
   image:

@@ -64,3 +64,16 @@ Return MYSQL PORT (MYSQL_TCP_PORT)
     {{- printf "%s" $dbport | quote -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return preferred or required node Affinity
+*/}} 
+{{- define "common.affinity" -}}
+{{- if and .Values.affinity.preferred (not .Values.affinity.required) -}}
+preferredDuringSchedulingIgnoredDuringExecution
+{{- else if and (not .Values.affinity.preferred) .Values.affinity.required -}}
+requiredDuringSchedulingIgnoredDuringExecution
+{{- else -}}
+preferredDuringSchedulingIgnoredDuringExecution
+{{- end -}}
+{{- end -}}

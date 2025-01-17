@@ -29,14 +29,14 @@ spec:
           value: {{ include "common.dbname" . }}
         - name: JOOMLA_DATABASE_PORT_NUMBER
           value: {{ include "common.joomlaDbPort" . }}
+        - name: JOOMLA_DB_PASSWORD
         - name: JOOMLA_DB_USER
           value: {{ include "common.dbuser" . }}
-        - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: joomla-secret
               key: dbpassword
-        ports:
+                ports:
         - containerPort: 80
           name: joomla
         {{- if .Values.startupProbe.enabled }}
@@ -78,3 +78,46 @@ spec:
       - name: joomla-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-pv-claim
+      {{- if .Values.affinity.enabled }}
+      affinity:
+        nodeAffinity:
+          {{- if and .Values.affinity.preferred (not .Values.affinity.required) }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{- range .Values.affinity.preferredDuringSchedulingIgnoredDuringExecution }}
+          - weight: {{ .weight }}
+            preference:
+              matchExpressions:
+              - key: {{ .key }}
+                operator: {{ .operator }}
+                values:
+                {{- range .values }}
+                - {{ . }}
+                {{- end }}
+          {{- end }}
+          {{- else if and .Values.affinity.required (not .Values.affinity.preferred) }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+          {{- range .Values.affinity.requiredDuringSchedulingIgnoredDuringExecution }}
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+          {{- end }}
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            {{- range .Values.affinity.preferredDuringSchedulingIgnoredDuringExecution }}
+            - weight: {{ .weight }}
+              preference:
+                matchExpressions:
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+            {{- end }}
+          {{- end }}
+      {{- end }}
