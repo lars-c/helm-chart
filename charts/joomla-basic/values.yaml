@@ -208,10 +208,20 @@ volumeMounts: []
 #
 nodeSelector: {}
 #
-tolerations: []
+tolerations:
+  enabled: true
+  rules:
+    - key: "key1"
+      operator: "Equal"
+      value: "gray"
+      effect: "NoSchedule"
+    - key: "key1"
+      operator: "Equal"
+      value: "orange"
+      effect: "NoSchedule"
 #
 affinity:
-  enabled: false
+  enabled: true
   preferred: true
   required: false
   #
@@ -225,12 +235,8 @@ affinity:
       key: color
       operator: In
       values:
-        - green
+        - orange
   requiredDuringSchedulingIgnoredDuringExecution:
-    - key: color
-      operator: In
-      values:
-        - pink
     - key: color
       operator: In
       values:
@@ -255,5 +261,25 @@ mysql:
     ##
     accessModes: "ReadWriteOnce"
     size: 2Gi
-
+  affinity:
+    enabled: true
+    preferred: true
+    required: false
+    #
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        key: color
+        operator: In
+        values:
+          - pink
+      - weight: 5
+        key: color
+        operator: In
+        values:
+          - green
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - key: color
+        operator: In
+        values:
+          - green
   

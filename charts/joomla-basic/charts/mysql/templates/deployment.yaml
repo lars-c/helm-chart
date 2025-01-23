@@ -53,21 +53,48 @@ spec:
       - name: joomla-mysql-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-mysql-pv-claim
+      {{- if .Values.affinity.enabled }}
       affinity:
         nodeAffinity:
+          {{- if and .Values.affinity.preferred (not .Values.affinity.required) }}
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: color
-                operator: In
-                values:
-                - pink
-          - weight: 50
-            preference:
-              matchExpressions:
-              - key: color
-                operator: In
-                values:
-                - green
+            {{- range .Values.affinity.preferredDuringSchedulingIgnoredDuringExecution }}
+            - weight: {{ .weight }}
+              preference:
+                matchExpressions:
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+            {{- end }}            
+          {{- else if and .Values.affinity.required (not .Values.affinity.preferred) }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            {{- range .Values.affinity.requiredDuringSchedulingIgnoredDuringExecution }}
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: {{ .key }}
+                    operator: {{ .operator }}
+                    values:
+                    {{- range .values }}
+                    - {{ . }}
+                    {{- end }}
+            {{- end }}            
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            {{- range .Values.affinity.preferredDuringSchedulingIgnoredDuringExecution }}
+            - weight: {{ .weight }}
+              preference:
+                matchExpressions:
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+            {{- end }}            
+          {{- end }}
+      {{- end }}
+
           
