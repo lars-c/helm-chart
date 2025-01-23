@@ -24,20 +24,18 @@ spec:
         name: joomla
         env:
         - name: JOOMLA_DB_HOST
-          value: {{ include "common.db.hostname" . }}
+          value: {{ include "common.dbhostname" . }}
         - name: JOOMLA_DB_NAME
           value: {{ include "common.dbname" . }}
-        - name: JOOMLA_DATABASE_PORT_NUMBER
-          value: {{ include "common.joomlaDbPort" . }}
-        - name: JOOMLA_DB_PASSWORD
         - name: JOOMLA_DB_USER
-          value: {{ include "common.dbuser" . }}
+          value: {{ include "common.global.dbuser" . }}
+        - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: joomla-secret
               key: dbpassword
-                ports:
-        - containerPort: 80
+        ports:
+        - containerPort: {{ include "joomla.service.port" . }}
           name: joomla
         {{- if .Values.startupProbe.enabled }}
         startupProbe:

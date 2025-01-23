@@ -8,9 +8,10 @@ global:
   ## JOOMLA_DB_NAME
   dbname: "joomla_db"
   ## 
+  ## JOOMLA_DB_USER /MYSQL_USER
   dbuser: "joomla"
   ##
-  ## OOMLA_DB_PASSWORD / MYSQL_ROOT_PASSWORD
+  ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
   dbpassword: "dbpassword"
   ##
   ## JOOMLA_DB_HOST
@@ -210,7 +211,7 @@ nodeSelector: {}
 tolerations: []
 #
 affinity:
-  enabled: true
+  enabled: false
   preferred: true
   required: false
   #

@@ -24,13 +24,13 @@ spec:
         name: mysql
         env:
         - name: MYSQL_HOST
-          value: {{ include "common.db.hostname" . }}
+          value: {{ include "common.dbhostname" . }}
         - name: MYSQL_DATABASE
           value: {{ include "common.dbname" . }}
         - name: MYSQL_TCP_PORT
-          value: {{ include "common.joomlaDbPort" . }}
+          value: {{ include "common.joomlaEnvDbPort" . }}
         - name: MYSQL_USER
-          value: {{ include "common.dbuser" . }}
+          value: {{ include "common.global.dbuser" . }}
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -43,7 +43,8 @@ spec:
               key: rootdbpassword
         - name: TZ
           value: {{ .Values.timezone | quote }}
-        - containerPort: {{ include "mysql.joomlaDbPort" . }}
+        ports:
+        - containerPort: {{ include "common.joomlaDbPort" . }}
           name: mysql
         volumeMounts:
         - name: joomla-mysql-persistent-storage

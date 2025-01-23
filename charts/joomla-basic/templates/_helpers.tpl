@@ -9,4 +9,3 @@ Return joomla service port
     {{- printf "%s" $serviceport -}}
 {{- end -}}
 {{- end -}}
-

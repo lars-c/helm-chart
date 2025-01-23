@@ -1,4 +1,26 @@
 {{/*
+Return DBHOST NAME value (JOOMLA_DB_HOST / MYSQL_HOST)
+*/}}
+{{- define "common.dbhostname" -}}
+{{- if .Values.global.joomlaDbHost }}
+    {{- printf .Values.global.joomlaDbHost | quote -}}
+{{- else -}}
+    {{- printf "joomla-mysql" | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return DB NAME value (JOOMLA_DB_NAME MYSQL_DATABASE)
+*/}} 
+{{- define "common.dbname" -}}
+{{- if .Values.global.dbname }}
+    {{- printf .Values.global.dbname | quote -}}
+{{- else -}}
+    {{- printf "joomla-db" | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return MYSQL_ROOT_PASSWORD value
 */}}
 {{- define "common.mysql.rootpassword" -}}
@@ -21,31 +43,9 @@ Return JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
 {{- end -}}
 
 {{/*
-Return DBHOST NAME value (JOOMLA_DB_HOST / MYSQL_HOST)
-*/}}
-{{- define "common.db.hostname" -}}
-{{- if .Values.global.joomlaDbHost }}
-    {{- printf .Values.global.joomlaDbHost | quote -}}
-{{- else -}}
-    {{- printf "joomla-mysql" | quote -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return DB NAME value (JOOMLA_DB_NAME MYSQL_DATABASE)
-*/}} 
-{{- define "common.dbname" -}}
-{{- if .Values.global.dbname }}
-    {{- printf .Values.global.dbname | quote -}}
-{{- else -}}
-    {{- printf "joomla-db" | quote -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return DB USER value (JOOMLA_DB_USER)
 */}} 
-{{- define "common.dbuser" -}}
+{{- define "common.global.dbuser" -}}
 {{- if .Values.global.dbuser }}
     {{- printf .Values.global.dbuser | quote -}}
 {{- else -}}
@@ -54,16 +54,32 @@ Return DB USER value (JOOMLA_DB_USER)
 {{- end -}}
 
 {{/*
-Return MYSQL PORT (MYSQL_TCP_PORT)
-*/}} 
-{{- define "common.joomlaDbPort" -}}
+Validate and return the MYSQL port as a string
+*/}}
+{{- define "common.validateDbPort" -}}
 {{- $dbport := toString .Values.global.joomlaDbPort -}}
 {{- if not (regexMatch "^[0-9]+$" $dbport) -}}
     {{- fail "Error: global.joomlaDbPort must be an integer value." -}}
 {{- else -}}
-    {{- printf "%s" $dbport | quote -}}
+    {{- $dbport -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return MYSQL PORT (containerPort) as an integer
+*/}}
+{{- define "common.joomlaDbPort" -}}
+{{- include "common.validateDbPort" . | int -}}
+{{- end -}}
+
+{{/*
+Return MYSQL PORT (MYSQL_TCP_PORT) as a quoted string
+*/}}
+{{- define "common.joomlaEnvDbPort" -}}
+{{- include "common.validateDbPort" . | quote -}}
+{{- end -}}
+
+
 
 {{/*
 Return preferred or required node Affinity
