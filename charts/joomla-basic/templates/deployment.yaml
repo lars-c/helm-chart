@@ -76,14 +76,16 @@ spec:
       - name: joomla-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-pv-claim
-      {{- if .Values.tolerations.enabled }}
+      {{- if .Values.tolerationsEnabled }}
       tolerations:
-        {{- range .Values.tolerations.rules }}
-        - key: {{ .key }}
-          operator: {{ .operator }}
-          value: {{ .value }}
-          effect: {{ .effect }}
-        {{- end }}
+      {{- range .Values.tolerations }}
+      - key: {{ .key }}
+        operator: {{ .operator }}
+        value: {{ .value }}
+        effect: {{ .effect }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
       {{- end }}
       {{- if .Values.affinity.enabled }}
       affinity:

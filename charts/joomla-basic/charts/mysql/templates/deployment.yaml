@@ -53,6 +53,15 @@ spec:
       - name: joomla-mysql-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-mysql-pv-claim
+      {{- if .Values.tolerationsEnabled }}
+      tolerations:
+      {{- range .Values.tolerations }}
+      - key: {{ .key }}
+        operator: {{ .operator }}
+        value: {{ .value }}
+        effect: {{ .effect }}
+      {{- end }}
+      {{- end }}
       {{- if .Values.affinity.enabled }}
       affinity:
         nodeAffinity:

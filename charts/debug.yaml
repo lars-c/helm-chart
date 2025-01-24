@@ -1,0 +1,445 @@
+NAME: joomla-basic-1737706092
+LAST DEPLOYED: Fri Jan 24 09:08:12 2025
+NAMESPACE: joomla
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+{}
+
+COMPUTED VALUES:
+affinity:
+  enabled: true
+  preferred: true
+  preferredDuringSchedulingIgnoredDuringExecution:
+  - key: color
+    operator: In
+    values:
+    - pink
+    weight: 10
+  - key: color
+    operator: In
+    values:
+    - green
+    weight: 20
+  required: false
+  requiredDuringSchedulingIgnoredDuringExecution:
+  - key: color
+    operator: In
+    values:
+    - green
+autoscaling:
+  enabled: false
+  maxReplicas: 100
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+common:
+  global:
+    dbname: joomla_db
+    dbpassword: dbpassword
+    dbuser: joomla
+    joomlaDbHost: joomla-mysql
+    joomlaDbPort: "3306"
+fullnameOverride: ""
+global:
+  dbname: joomla_db
+  dbpassword: dbpassword
+  dbuser: joomla
+  joomlaDbHost: joomla-mysql
+  joomlaDbPort: "3306"
+image:
+  debug: false
+  pullPolicy: IfNotPresent
+  repository: joomla
+  tag: php8.3-apache
+imagePullSecrets: []
+ingress:
+  annotations: {}
+  className: ""
+  enabled: false
+  hosts:
+  - host: chart-example.local
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+  tls: []
+livenessProbe:
+  enabled: false
+  failureThreshold: 6
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+mysql:
+  affinity:
+    enabled: true
+    preferred: true
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - key: color
+      operator: In
+      values:
+      - pink
+      weight: 1
+    - key: color
+      operator: In
+      values:
+      - green
+      weight: 5
+    required: false
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - key: color
+      operator: In
+      values:
+      - green
+  auth:
+    rootdbpassword: bxJK8Q1wd9ZFeDO8bOKbQ9CN
+  autoscaling:
+    enabled: false
+    maxReplicas: 100
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+  fullnameOverride: ""
+  global:
+    dbname: joomla_db
+    dbpassword: dbpassword
+    dbuser: joomla
+    joomlaDbHost: joomla-mysql
+    joomlaDbPort: "3306"
+  image:
+    pullPolicy: IfNotPresent
+    repository: mysql
+    tag: "8.0"
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    className: ""
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+    tls: []
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  nameOverride: ""
+  nodeSelector: {}
+  persistence:
+    accessModes: ReadWriteOnce
+    size: 2Gi
+    storageClass: local-path
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+  replicaCount: 1
+  resources: {}
+  securityContext: {}
+  service:
+    port: 80
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automount: true
+    create: true
+    name: ""
+  timezone: Europe/Copenhagen
+  tolerations: []
+  volumeMounts: []
+  volumes: []
+nameOverride: ""
+nodeSelector: {}
+persistence:
+  accessModes: ReadWriteOnce
+  annotations: {}
+  enabled: "true"
+  existingClaim: ""
+  hostPath: ""
+  size: 1Gi
+  storageClass: local-path
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+readinessProbe:
+  enabled: false
+  failureThreshold: 6
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  successThreshold: 1
+  timeoutSeconds: 3
+resources: {}
+securityContext: {}
+service:
+  loadBalancerIP: ""
+  port: 80
+  type: LoadBalancer
+serviceAccount:
+  annotations: {}
+  automount: true
+  create: true
+  name: ""
+startupProbe:
+  enabled: false
+  failureThreshold: 3
+  initialDelaySeconds: 600
+  periodSeconds: 20
+  successThreshold: 1
+  timeoutSeconds: 10
+tolerations:
+  enabled: false
+  rules:
+  - effect: NoSchedule
+    key: key1
+    operator: Equal
+    value: gray
+  - effect: NoSchedule
+    key: key1
+    operator: Equal
+    value: orange
+volumeMounts: []
+volumes: []
+
+HOOKS:
+MANIFEST:
+---
+# Source: joomla-basic/charts/mysql/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+data:
+  dbpassword: "ZGJwYXNzd29yZA=="
+  rootdbpassword: "YnhKSzhRMXdkOVpGZURPOGJPS2JROUNO"
+---
+# Source: joomla-basic/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: joomla-secret
+type: Opaque
+data:
+  dbpassword: "ZGJwYXNzd29yZA=="
+---
+# Source: joomla-basic/charts/mysql/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+data:
+  #joomla_db_host: "joomla-mysql"
+  #mysql_database: "joomla_12"
+  #mysql_timezone: "Europe/Copenhagen"
+---
+# Source: joomla-basic/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: joomla
+data:
+  #joomla_db_host: "joomla-mysql"
+  #mysql_database: "joomla_12"
+---
+# Source: joomla-basic/charts/mysql/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: joomla-mysql-pv-claim
+  labels:
+    app: joomla
+spec:
+  storageClassName: "local-path"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+# Source: joomla-basic/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: joomla-pv-claim
+  labels:
+    app: joomla
+spec:
+  storageClassName: "local-path"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Source: joomla-basic/charts/mysql/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: joomla-mysql
+  labels:
+    app: joomla
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: joomla
+    tier: mysql
+  clusterIP: None
+---
+# Source: joomla-basic/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: joomla
+  labels:
+    app: joomla
+  annotations:
+    #metallb.universe.tf/address-pool: test-pool
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: joomla
+---
+# Source: joomla-basic/charts/mysql/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla-mysql
+  labels:
+    app: joomla
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        name: mysql
+        env:
+        - name: MYSQL_HOST
+          value: "joomla-mysql"
+        - name: MYSQL_DATABASE
+          value: "joomla_db"
+        - name: MYSQL_TCP_PORT
+          value: "3306"
+        - name: MYSQL_USER
+          value: "joomla"
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: dbpassword
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: rootdbpassword
+        - name: TZ
+          value: "Europe/Copenhagen"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: joomla-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes: 
+      - name: joomla-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: joomla-mysql-pv-claim
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: color
+                  operator: In
+                  values:
+                  - pink
+            - weight: 5
+              preference:
+                matchExpressions:
+                - key: color
+                  operator: In
+                  values:
+                  - green
+---
+# Source: joomla-basic/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla
+  labels:
+    app: joomla
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: frontend
+    spec:
+      containers:
+      - image: joomla:php8.3-apache
+        imagePullPolicy: IfNotPresent
+        name: joomla
+        env:
+        - name: JOOMLA_DB_HOST
+          value: "joomla-mysql"
+        - name: JOOMLA_DB_NAME
+          value: "joomla_db"
+        - name: JOOMLA_DB_USER
+          value: "joomla"
+        - name: JOOMLA_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: joomla-secret
+              key: dbpassword
+        ports:
+        - containerPort: 80
+          name: joomla
+        volumeMounts:
+        - name: joomla-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: joomla-persistent-storage
+        persistentVolumeClaim:
+          claimName: joomla-pv-claim
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            preference:
+              matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - pink
+          - weight: 20
+            preference:
+              matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - green
+
