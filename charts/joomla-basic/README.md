@@ -4,20 +4,94 @@
 
 [Joomla!](http://www.joomla.org/)
 
-## For testing and educational purpose only
-
+## Basic Helm chart for Joomla.
 ```txt
-Chart properly include configuration errors and omissions. Documentation is incomplete and/or misleading. Purpose of this chart is testing only.
+Chart include configuration errors and omissions. 
+Documentation is incomplete and/or misleading. 
+Purpose of this chart is testing only.
 ```
-
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
+#### Chart
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/joomla
+Joomla
+```
+#### Sub-charts
+```console
+MySQL
+Common
+```
+#### Global values (required)
+```console
+  dbname: "joomla_db"
+  dbuser: "joomla"
+  dbpassword: "dbpassword"
+  joomlaDbHost: "joomla-mysql"
+  joomlaDbPort: "3306"
+```
+#### Images
+```console
+Dockerhub Joomla  official image tag: "php8.3-apache" (https://hub.docker.com/_/joomla)
+Dockerhub MySQL official image tag: "8.0" (https://hub.docker.com/_/mysql)
+```
+#### persistence (default)
+```console
+  enabled: "true"
+  storageClass: "local-path"
+  accessModes: "ReadWriteOnce"
+```
+#### service (default)
+```console
+  type: LoadBalancer
+  port: 80
+  #clusterIP:
+  loadBalancerIP: ""
+```
+##### ingress (not tested)
+```console
+```
+#### Probes (default disabled)
+```console
+startupProbe
+livenessProbe
+readinessProbe
+```
+##### tolerations (default enabled)
+```console
+    - key: "key1"
+      operator: "Equal"
+      value: "gray"
+      effect: "NoSchedule"
+    - key: "key1"
+      operator: "Equal"
+      value: "orange"
+      effect: "NoSchedule"
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+##### affinity (default enabled)
+```console
+Enable/Disable
+Both preferred and required. 
+preferred (+) required (-) : preferred
+preferred (-) required (+) : required
+preferred (+) required (+) : preferred
+preferred (-) required (-) : preferred
 
-The command deploys Joomla! on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+    key: color
+    operator: In
+    values:
+        - pink
+    - weight: 5
+    key: color
+    operator: In
+    values:
+        - green
+requiredDuringSchedulingIgnoredDuringExecution:
+    - key: color
+    operator: In
+    values:
+        - green
+```
+##### MySQL (default)
+```console
+```
