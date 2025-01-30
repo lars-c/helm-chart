@@ -1,74 +1,63 @@
 # Default values for joomla-basic.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-## Sahred db name/user/password between joomla and mysql
+#
+## Shared db name/user/password for Joomla and MySQL
 ##
 global:
   ## JOOMLA_DB_NAME
+  ##
   dbname: "joomla_db"
-  ## 
-  ## JOOMLA_DB_USER /MYSQL_USER
+  ## JOOMLA_DB_USER / MYSQL_USER
+  ##
   dbuser: "joomla"
-  ##
   ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
+  ##
   dbpassword: "dbpassword"
-  ##
   ## JOOMLA_DB_HOST
-  joomlaDbHost: "joomla-mysql"
   ##
-  ## JOOMLA_DATABASE_PORT_NUMBER MYSQL_TCP_PORT
+  joomlaDbHost: "joomla-mysql"
+  ## JOOMLA_DATABASE_PORT_NUMBER / MYSQL_TCP_PORT
+  ##
   joomlaDbPort: "3306"
-
-
-# This sets the container image
+## Joomla image versions
+## ref: https://hub.docker.com/_/joomla
+##
 image:
   repository: joomla
   tag: "php8.3-apache"
+  ## Specify a imagePullPolicy. The default is 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+  ## 
   pullPolicy: IfNotPresent
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
-
-## @param hostAliases [array] Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+## ## Partially override common.names.fullname template (will maintain the release name)
 ##
-# hostAliases:
-#   ## Necessary for apache-exporter to work
-#   ##
-#   - ip: "127.0.0.1"
-#     hostnames:
-#       - "status.localhost"
-#
-# This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
-# This is to override the chart name.
 nameOverride: ""
+## String to fully override common.names.fullname template
+##
 fullnameOverride: ""
+## Deployment pod host aliases
+## Ref.: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-## Joomla site name (skip with manual installation)
+hostAliases:
+  ## Necessary for apache-exporter to work
+  ##
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+## Update strategy RollingUpdate, Recreate
+## For RWO PVs, you may want to consider Recreate to ensure the PV is released before the Pod starts
+## Will create downtime during upgrades
+## Otherwise, you can use RollingUpdate which will keep the PV bound to the old pod until the new pod is running
 ##
-#joomlaSitename: "joomla"
-## Joomla admin user real name (skip with manual installation)
+updateStrategy:
+  type: Recreate
+## Enable persistence using Persistent Volume Claims
 ##
-#joomlaAdminName: "Joomla_admin_user_real_name"
-##
-## Joomla admin user name (skip with manual installation)
-##
-#joomlaAdminUserame: "Joomla_admin_username"
-##
-## Joomla admin user password (skip with manual installation)
-##
-#joomlaAdminPassword: "password"
-## Admin user email
-##
-#joomlaAdminEmail: "user@test.com"
-## @param allowEmptyPassword Allow DB blank passwords
-## 
-
 persistence:
-  enabled: "true"
-  ## If defined, storageClassName: <storageClass>
+  enabled: true
+  ## storageClass PVC Storage Class for Joomla! volume
+  ## accessModes PVC Access Mode for Joomla! volume
+  ## Size PVC Storage Request for Joomla! volume
   ##
   storageClass: "local-path"
   accessModes: "ReadWriteOnce"
@@ -81,144 +70,11 @@ persistence:
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
-  ##
   hostPath: ""
   annotations: {}
-
-# 416 This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-# This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
-podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-podLabels: {}
-
-# 304
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
-# This is for setting up a service
-service:
-  # This sets the service type: LoadBalancer clusterIP
-  type: LoadBalancer
-  # This sets the external port
-  port: 80
-  ##
-  #clusterIP:
-  ## loadBalancerIP for the Joomla Service
-  ##
-  loadBalancerIP: ""
-
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-## This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+## Affinity for pod assignment
+## preferred (soft) and required (hard) affinity
 ##
-startupProbe:
-  enabled: false
-  initialDelaySeconds: 600
-  periodSeconds: 20
-  timeoutSeconds: 10
-  successThreshold: 1
-  failureThreshold: 3
-## Enable livenessProbe
-##
-livenessProbe:
-  enabled: false
-  initialDelaySeconds: 600
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-## Enable readinessProbe
-##
-readinessProbe:
-  enabled: false
-  initialDelaySeconds: 30
-  periodSeconds: 5
-  timeoutSeconds: 3
-  failureThreshold: 6
-  successThreshold: 1
-##
-#This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-#
-nodeSelector: {}
-#
-tolerationsEnabled: true
-tolerations:
-  - key: "key1"
-    operator: "Equal"
-    value: "gray"
-    effect: "NoSchedule"
-  - key: "key1"
-    operator: "Equal"
-    value: "orange"
-    effect: "NoSchedule"
-#
 affinity:
   enabled: true
   preferred: true
@@ -239,7 +95,136 @@ affinity:
     - key: color
       operator: In
       values:
-        - green
+        - green  
+## nodeSelector Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+##
+nodeSelector: {}       
+## Tolerations for pod assignment
+##
+tolerationsEnabled: true
+tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "gray"
+    effect: "NoSchedule"
+  - key: "key1"
+    operator: "Equal"
+    value: "orange"
+    effect: "NoSchedule"
+#### Set container requests and limits for resources
+##
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+## Configure Pods Security Context
+##
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
+  fsGroup: 1001  
+## Configure Container Security Context
+##
+containerSecurityContext:
+  enabled: true
+  seLinuxOptions: {}
+  runAsUser: 1001
+  runAsGroup: 0
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+## This is to setup the liveness and readiness probes
+## Ref.: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 600
+  periodSeconds: 15
+  timeoutSeconds: 5
+  successThreshold: 6
+  failureThreshold: 1
+##
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+##
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+## This is for setting Kubernetes Annotations to a Pod.
+## Ref.: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
+##
+podAnnotations: {}
+# This is for setting Kubernetes Labels to a Pod.
+# Ref.: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## This is for setting up a service
+## Ref.: https://kubernetes.io/docs/concepts/services-networking/service/
+##
+service:
+  ## This sets the service type: LoadBalancer clusterIP
+  type: LoadBalancer
+  ## This sets the external port
+  port: 80
+  ## clusterIP for the Joomla Service
+  #clusterIP:
+  ## loadBalancerIP for the Joomla Service
+  loadBalancerIP: ""
+## This block is for setting up the ingress
+## Ref.: https://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+## Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+##
+## MySQL specific configuration
 mysql:
   ## This sets the container image for MySQL
   image:
@@ -270,7 +255,7 @@ mysql:
       value: "orange"
       effect: "NoSchedule"
   affinity:
-    enabled: false
+    enabled: true
     preferred: true
     required: false
     #
