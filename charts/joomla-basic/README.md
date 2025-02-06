@@ -32,13 +32,17 @@ Common
 Dockerhub Joomla  official image tag: "php8.3-apache" (https://hub.docker.com/_/joomla)
 Dockerhub MySQL official image tag: "8.0" (https://hub.docker.com/_/mysql)
 ```
-#### persistence (default)
+##### updateStrategy (default)
 ```console
-  enabled: "true"
+  type: Recreate
+```
+#### joomla persistence (default)
+```console
+  enabled: true
   storageClass: "local-path"
   accessModes: "ReadWriteOnce"
 ```
-#### service (default)
+#### joomla service (default)
 ```console
   type: LoadBalancer
   port: 80
@@ -48,10 +52,10 @@ Dockerhub MySQL official image tag: "8.0" (https://hub.docker.com/_/mysql)
 ##### ingress (not tested)
 ```console
 ```
-#### Probes (default disabled)
+#### Joomla probes (default)
 ```console
 startupProbe
-livenessProbe
+livenessProbe (enabled)
 readinessProbe
 ```
 ##### tolerations (default enabled)

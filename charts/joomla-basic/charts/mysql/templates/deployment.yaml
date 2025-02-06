@@ -46,6 +46,16 @@ spec:
         ports:
         - containerPort: {{ include "common.joomlaDbPort" . }}
           name: mysql
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+            tcpSocket:
+              port: mysql
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+        {{- end }}
         volumeMounts:
         - name: joomla-mysql-persistent-storage
           mountPath: /var/lib/mysql

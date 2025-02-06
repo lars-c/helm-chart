@@ -61,7 +61,7 @@ spec:
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
             httpGet:
-              path: /installation/index.php
+              path: /index.php
               port: joomla
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}

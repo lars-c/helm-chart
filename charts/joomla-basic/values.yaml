@@ -160,7 +160,7 @@ startupProbe:
   failureThreshold: 1
 ##
 livenessProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -275,4 +275,10 @@ mysql:
         operator: In
         values:
           - green
-  
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 600
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
