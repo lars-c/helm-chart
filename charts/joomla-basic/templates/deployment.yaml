@@ -72,6 +72,26 @@ spec:
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html
+      {{- if .Values.debug.enabled }}
+      - image: busybox
+        name: probe-logger
+        command:
+          - sh
+          - -c
+          - |
+            while true; do 
+              if nc -z joomla {{ .Values.service.port }}; then 
+                echo "$(date) - Service port probe successful"; 
+              else 
+                echo "$(date) - Service port probe FAILED"; 
+              fi
+              sleep {{ .Values.debug.interval }}; 
+            done
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "16Mi"      
+      {{- end}}
       volumes:
       - name: joomla-persistent-storage
         persistentVolumeClaim:

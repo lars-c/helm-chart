@@ -51,6 +51,13 @@ hostAliases:
 ##
 updateStrategy:
   type: Recreate
+## Eanble debug mode for joomla service port. Default is false
+## If enabled, the test will be performed every interval seconds
+##
+debug: 
+  enabled: true
+  interval: 15
+  retries: 3
 ## Enable persistence using Persistent Volume Claims
 ##
 persistence:
