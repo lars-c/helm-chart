@@ -79,13 +79,22 @@ spec:
           - sh
           - -c
           - |
-            while true; do 
-              if nc -z joomla {{ .Values.service.port }}; then 
-                echo "$(date) - Service port probe successful"; 
-              else 
-                echo "$(date) - Service port probe FAILED"; 
+            while true; do
+              success=0
+              for i in {1..{{ .Values.debug.retries }}}; do
+                if nc -z -w 10 joomla {{ .Values.service.port }}; then
+                  echo "$(date) - Joomla service port successful!"
+                  success=1
+                  break
+                fi
+                sleep 1
+              done
+
+              if [ $success -eq 0 ]; then
+                echo "$(date) - Joomla service port failed!"
               fi
-              sleep {{ .Values.debug.interval }}; 
+              
+              sleep {{ .Values.debug.interval }};
             done
         resources:
           limits:

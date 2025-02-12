@@ -52,12 +52,12 @@ hostAliases:
 updateStrategy:
   type: Recreate
 ## Eanble debug mode for joomla service port. Default is false
-## If enabled, the test will be performed every interval seconds
+## If enabled, the test will be performed every interval seconds each time, up to retries times.
 ##
 debug: 
-  enabled: true
-  interval: 15
-  retries: 3
+  enabled: false
+  interval: 5
+  retries: 5
 ## Enable persistence using Persistent Volume Claims
 ##
 persistence:
@@ -234,10 +234,19 @@ volumeMounts: []
 ## MySQL specific configuration
 mysql:
   ## This sets the container image for MySQL
+  ## ref: https://hub.docker.com/_/mysql
+  ##
   image:
     repository: mysql
     tag: "8.0"
     pullPolicy: IfNotPresent
+  ## Eanble debug mode for MySQL service port. Default is false
+  ## If enabled, the test will be performed every interval seconds each time, up to retries times.
+  ##
+  debug: 
+    enabled: true
+    interval: 5
+    retries: 5
   ##
   auth:
     ## MYSQL_ROOT_PASS
