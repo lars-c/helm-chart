@@ -8,7 +8,7 @@
 ```txt
 Chart include configuration errors and omissions. 
 Documentation is incomplete and/or misleading. 
-Purpose of this chart is testing only.
+
 ```
 #### Chart
 ```console
@@ -21,6 +21,15 @@ Common
 ```
 #### Global values (required)
 ```console
+  dbname: "joomla_db"
+  dbuser: "joomla"
+  dbpassword: "dbpassword"
+  joomlaDbHost: "joomla-mysql"
+  joomlaDbPort: "3306"
+```
+#### CLI install (automatic install)
+```console
+
   dbname: "joomla_db"
   dbuser: "joomla"
   dbpassword: "dbpassword"

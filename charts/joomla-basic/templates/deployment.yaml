@@ -18,6 +18,38 @@ spec:
         app: joomla
         tier: frontend
     spec:
+      initContainers:
+      - name: joomla-bootstrap
+        image: joomla:php8.3-apache
+        volumeMounts:
+        - name: joomla-persistent-storage
+          mountPath: /var/www/html
+        - name: log-valume
+          mountPath: /var/log
+        command:
+          - sh
+          - -c
+          - |
+            echo "Copying Joomla files to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
+            if [ ! -f /var/www/html/index.php ]; then
+              cp -rp /usr/src/joomla/* /var/www/html/
+            fi
+            echo "Joomla files copied to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
+      - name: mysql-check
+        image: busibox
+        volumeMounts:
+        - name: log-valume
+          mountPath: /var/log
+        command:
+          - sh
+          - -c
+          - |
+            echo "(${date}) - Checking MySQL service port" | tee -a /var/log/mysql-check.log
+            until nc -z -w 10 {{ .Values.global.joomlaDbHost }} {{ .Values.global.joomlaDbPort }}; do
+              echo "(${date}) - MySQL service port is not ready yet" | tee -a /var/log/mysql-check.log
+              sleep 5
+            done
+            echo "(${date}) - MySQL service port is ready" | tee -a /var/log/mysql-check.log
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -105,6 +137,9 @@ spec:
       - name: joomla-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-pv-claim
+      - name: log-valume
+        emptyDir:
+          sizeLimit: "500Mi"
       {{- if .Values.tolerationsEnabled }}
       tolerations:
       {{- range .Values.tolerations }}
