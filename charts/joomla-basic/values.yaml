@@ -5,7 +5,7 @@
 ## Shared db name/user/password for Joomla and MySQL
 ##
 global:
-  ## JOOMLA_DB_NAME
+  ## Database name (JOOMLA_DB_NAME)
   ##
   dbname: "joomla_db"
   ## JOOMLA_DB_USER / MYSQL_USER
@@ -53,11 +53,36 @@ updateStrategy:
   type: Recreate
 ## Eanble debug mode for joomla service port. Default is false
 ## If enabled, the test will be performed every interval seconds each time, up to retries times.
-##
+## (removed)
 debug: 
   enabled: false
   interval: 5
   retries: 5
+## Joomla CLI install
+## Ref,: https://jdocmanual.org/en/jdocmanual?article=user/command-line-interface/joomla-cli-installation
+##
+cli:
+  ## Enable Joomla CLI install
+  enabled: true
+  ## Name of the website
+  siteName: "Basic Joomla"
+  ## Real name of the Super User account
+  adminUser: "Karen"
+  ## Username for the Super User account
+  adminUsername: "karen126"
+  ## Password for the Super User account
+  adminPassword: "Garbage1n0ut"
+  ## Email address for the Super User account
+  adminEmail: "karens@mail.dk"
+  ## Database type. Supported by Joomla: mysql (=MySQL (PDO)), mysqli (=MySQLi), pgsql (=PostgreSQL (PDO)) [default: "mysqli"]
+  dbType: "mysqli"
+  ## Prefix for the database tables [default: "w7amf_"]. If dbPrefix is empty, the prefix will be generated automatically
+  dbPrefix: ""
+  ## Encryption for the database connection. Values: 0=None, 1=One way, 2=Two way [default: "0"]
+  dbEncryption: "0"
+  ## Relative or absolute path to the public folder [default: ""]
+  publicFolder: ""
+  ##
 ## Enable persistence using Persistent Volume Claims
 ##
 persistence:

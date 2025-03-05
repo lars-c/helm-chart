@@ -1,25 +1,43 @@
 <!--- app-name: Joomla! -->
 <!-- markdownlint-disable-next-line MD026 -->
-# Basic test chart for Joomla
+# Basic Helm chart for Joomla
 
 [Joomla!](http://www.joomla.org/)
 
-## Basic Helm chart for Joomla.
+## Limitations
 ```txt
 Chart include configuration errors and omissions. 
-Documentation is incomplete and/or misleading. 
-
+Documentation is incomplete and/or misleading.
 ```
-#### Chart
+
+#### Images
+```console
+Dockerhub Joomla  official image tag: "php8.3-apache" (https://hub.docker.com/_/joomla)
+Dockerhub MySQL official image tag: "8.0" (https://hub.docker.com/_/mysql)
+```
+
+#### Charts
 ```console
 Joomla
+Sub-charts:
+  MySQL
+  Common
 ```
-#### Sub-charts
+
+#### initContainers
 ```console
-MySQL
-Common
+0) joomla-bootstrap (If CLI install is enabled):
+  joomla-bootstrap will copy files from  /usr/src/joomla/ to /var/www/html/. Necessary for the CLI installer to run correctly.
+  Log file: /var/log/joomla-bootstrap.log
+1) joomla-installer (If CLI install is enabled):
+  Will run the actual Joomla CLI installer.
+  Log file: /var/log/cli-installer.log
+2) mysql-check:
+  Test MYSQL port for availability before going ahead and installing Joomla.
+  Log file: /var/log/mysql-check.log
 ```
-#### Global values (required)
+
+#### Global values (mandatory)
 ```console
   dbname: "joomla_db"
   dbuser: "joomla"
@@ -27,6 +45,7 @@ Common
   joomlaDbHost: "joomla-mysql"
   joomlaDbPort: "3306"
 ```
+
 #### CLI install (automatic install)
 ```console
 
@@ -36,21 +55,19 @@ Common
   joomlaDbHost: "joomla-mysql"
   joomlaDbPort: "3306"
 ```
-#### Images
-```console
-Dockerhub Joomla  official image tag: "php8.3-apache" (https://hub.docker.com/_/joomla)
-Dockerhub MySQL official image tag: "8.0" (https://hub.docker.com/_/mysql)
-```
+
 ##### updateStrategy (default)
 ```console
   type: Recreate
 ```
+
 #### joomla persistence (default)
 ```console
   enabled: true
   storageClass: "local-path"
   accessModes: "ReadWriteOnce"
 ```
+
 #### joomla service (default)
 ```console
   type: LoadBalancer
@@ -58,14 +75,15 @@ Dockerhub MySQL official image tag: "8.0" (https://hub.docker.com/_/mysql)
   #clusterIP:
   loadBalancerIP: ""
 ```
+
 ##### ingress (not tested)
 ```console
 ```
 #### Joomla probes (default)
 ```console
-startupProbe
-livenessProbe (enabled)
-readinessProbe
+  startupProbe
+  livenessProbe (enabled)
+  readinessProbe
 ```
 ##### tolerations (default enabled)
 ```console

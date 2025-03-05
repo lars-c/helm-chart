@@ -9,3 +9,17 @@ Return joomla service port
     {{- printf "%s" $serviceport -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return Joomla database prefix.
+If a manual prefix is provided, use it. Otherwise, generate a random one.
+*/}} 
+{{- define "joomla.dbprefix" -}}
+{{- $dbPrefix := toString .Values.cli.dbPrefix -}}
+{{- if $dbPrefix | trim | eq "" -}}
+    {{- $prefix := randAlphaNum 5 -}}
+    {{- printf "%s_" $prefix -}}
+{{- else -}}
+    {{- printf "%s" $dbPrefix -}}
+{{- end -}}
+{{- end -}}

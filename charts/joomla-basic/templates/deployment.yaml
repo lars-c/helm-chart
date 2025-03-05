@@ -19,6 +19,7 @@ spec:
         tier: frontend
     spec:
       initContainers:
+      {{- if .Values.cli.enabled }}
       - name: joomla-bootstrap
         image: joomla:php8.3-apache
         volumeMounts:
@@ -30,11 +31,45 @@ spec:
           - sh
           - -c
           - |
-            echo "Copying Joomla files to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
+            echo "$(date) Copying Joomla files to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
             if [ ! -f /var/www/html/index.php ]; then
               cp -rp /usr/src/joomla/* /var/www/html/
             fi
-            echo "Joomla files copied to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
+            echo "$(data) Joomla files copied to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
+      - name: joomla-installer
+        image: joomla:php8.3-apache
+        volumeMounts:
+        - name: joomla-persistent-storage
+          mountPath: /var/www/html
+        - name: log-volume
+          mountPath: /var/log
+        command: 
+          - bash
+          - -c
+          - |
+            echo "Current working directory: $(pwd)" | tee -a /var/log/debug.log
+            ls -lah /var/www/html/installation | tee -a /var/log/debug.log
+            if [ ! -f "/var/www/html/configuration.php" ]; then
+              echo "$(date) Running Joomla CLI installer..." | tee -a /var/log/cli-installer.log
+              php /var/www/html/installation/joomla.php install \
+              --site-name={{ .Values.cli.siteName | quote }} \
+              --admin-user={{ .Values.cli.adminUser | quote }} \
+              --admin-username={{ .Values.cli.adminUsername }} \
+              --admin-password={{ .Values.cli.adminPassword }} \
+              --admin-email={{ .Values.cli.adminEmail }} \
+              --db-type={{ .Values.cli.dbType }} \
+              --db-host={{ .Values.global.joomlaDbHost }} \
+              --db-user={{ .Values.global.dbuser }} \
+              --db-pass={{ .Values.global.dbpassword }} \
+              --db-name={{ .Values.global.dbname }} \
+              --db-prefix={{ include "joomla.dbprefix" . }} \
+              --db-encryption={{ .Values.cli.dbEncryption }} \
+              --public-folder={{ .Values.cli.publicFolder | quote }} | tee -a /var/log/cli-installer.log
+              echo "$(date) Joomla installation completed." | tee -a /var/log/cli-installer.log
+            else
+              echo "$(data) Joomla already installed. Skipping installation." | tee -a /var/log/cli-installer.log
+            fi
+      {{- end }}
       - name: mysql-check
         image: busibox
         volumeMounts:
@@ -104,35 +139,6 @@ spec:
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html
-      {{- if .Values.debug.enabled }}
-      - image: busybox
-        name: probe-logger
-        command:
-          - sh
-          - -c
-          - |
-            while true; do
-              success=0
-              for i in {1..{{ .Values.debug.retries }}}; do
-                if nc -z -w 10 joomla {{ .Values.service.port }}; then
-                  echo "$(date) - Joomla service port successful!"
-                  success=1
-                  break
-                fi
-                sleep 1
-              done
-
-              if [ $success -eq 0 ]; then
-                echo "$(date) - Joomla service port failed!"
-              fi
-              
-              sleep {{ .Values.debug.interval }};
-            done
-        resources:
-          limits:
-            cpu: "10m"
-            memory: "16Mi"      
-      {{- end}}
       volumes:
       - name: joomla-persistent-storage
         persistentVolumeClaim:
