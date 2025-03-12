@@ -21,23 +21,38 @@ spec:
       initContainers:
       {{- if .Values.cli.enabled }}
       - name: joomla-bootstrap
-        image: joomla:php8.3-apache
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html
-        - name: log-valume
+        - name: log-volume
           mountPath: /var/log
         command:
           - sh
           - -c
           - |
             echo "$(date) Copying Joomla files to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
-            if [ ! -f /var/www/html/index.php ]; then
-              cp -rp /usr/src/joomla/* /var/www/html/
-            fi
-            echo "$(data) Joomla files copied to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
-      - name: joomla-installer
-        image: joomla:php8.3-apache
+            cp -rp /usr/src/joomla/* /var/www/html/
+            echo "$(date) Joomla files copied to /var/www/html" | tee -a /var/log/joomla-bootstrap.log
+            echo "$(date) ls -lah /var/www/html:"  | tee -a /var/log/joomla-bootstrap.log
+            ls -lah /var/www/html | tee -a /var/log/joomla-bootstrap.log
+      - name: mysql-check
+        image: busybox
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log
+        command:
+          - sh
+          - -c
+          - |
+            echo "${date} Checking MySQL service port" | tee -a /var/log/mysql-check.log
+            until nc -z -w 10 {{ .Values.global.joomlaDbHost }} {{ .Values.global.joomlaDbPort }}; do
+              echo "${date} MySQL service port is not ready yet" | tee -a /var/log/mysql-check.log
+              sleep 5
+            done
+            echo "${date} MySQL service port is ready" | tee -a /var/log/mysql-check.log            
+      - name: cli-installer
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html
@@ -47,55 +62,46 @@ spec:
           - bash
           - -c
           - |
-            echo "Current working directory: $(pwd)" | tee -a /var/log/debug.log
+            echo "$(date) Current working directory: $(pwd)" | tee -a /var/log/debug.log
             ls -lah /var/www/html/installation | tee -a /var/log/debug.log
+            ls -lah /var/www/html | tee -a /var/log/debug.log
             if [ ! -f "/var/www/html/configuration.php" ]; then
               echo "$(date) Running Joomla CLI installer..." | tee -a /var/log/cli-installer.log
               php /var/www/html/installation/joomla.php install \
-              --site-name={{ .Values.cli.siteName | quote }} \
-              --admin-user={{ .Values.cli.adminUser | quote }} \
-              --admin-username={{ .Values.cli.adminUsername }} \
-              --admin-password={{ .Values.cli.adminPassword }} \
-              --admin-email={{ .Values.cli.adminEmail }} \
-              --db-type={{ .Values.cli.dbType }} \
-              --db-host={{ .Values.global.joomlaDbHost }} \
-              --db-user={{ .Values.global.dbuser }} \
-              --db-pass={{ .Values.global.dbpassword }} \
-              --db-name={{ .Values.global.dbname }} \
-              --db-prefix={{ include "joomla.dbprefix" . }} \
-              --db-encryption={{ .Values.cli.dbEncryption }} \
-              --public-folder={{ .Values.cli.publicFolder | quote }} | tee -a /var/log/cli-installer.log
+              --site-name=Site-Name \
+              --admin-user=Karen \
+              --admin-username=karen126 \
+              --admin-password=Garbage1n0ut \
+              --admin-email=karens@mail.dk \
+              --db-type=mysqli \
+              --db-host=joomla-mysql \
+              --db-user=joomla \
+              --db-pass=dbpassword \
+              --db-name=joomla_db \
+              --db-prefix=w7amf_ \
+              --db-encryption=0 \
+              --public-folder="" | tee -a /var/log/cli-installer.log
               echo "$(date) Joomla installation completed." | tee -a /var/log/cli-installer.log
             else
               echo "$(data) Joomla already installed. Skipping installation." | tee -a /var/log/cli-installer.log
             fi
       {{- end }}
-      - name: mysql-check
-        image: busibox
-        volumeMounts:
-        - name: log-valume
-          mountPath: /var/log
-        command:
-          - sh
-          - -c
-          - |
-            echo "(${date}) - Checking MySQL service port" | tee -a /var/log/mysql-check.log
-            until nc -z -w 10 {{ .Values.global.joomlaDbHost }} {{ .Values.global.joomlaDbPort }}; do
-              echo "(${date}) - MySQL service port is not ready yet" | tee -a /var/log/mysql-check.log
-              sleep 5
-            done
-            echo "(${date}) - MySQL service port is ready" | tee -a /var/log/mysql-check.log
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: joomla
+        volumeMounts:
+        - name: joomla-persistent-storage
+          mountPath: /var/www/html
+        - name: log-volume
+          mountPath: /var/log
         env:
         - name: JOOMLA_DB_HOST
-          value: {{ include "common.dbhostname" . }}
+          value: {{ .Values.global.joomlaDbHost }}
         - name: JOOMLA_DB_NAME
-          value: {{ include "common.dbname" . }}
+          value: {{ .Values.global.dbname}}
         - name: JOOMLA_DB_USER
-          value: {{ include "common.global.dbuser" . }}
+          value: {{ .Values.global.dbuser }}
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -136,16 +142,13 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
         {{- end }}
-        volumeMounts:
-        - name: joomla-persistent-storage
-          mountPath: /var/www/html
       volumes:
       - name: joomla-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-pv-claim
-      - name: log-valume
+      - name: log-volume
         emptyDir:
-          sizeLimit: "500Mi"
+          sizeLimit: "50Mi"
       {{- if .Values.tolerationsEnabled }}
       tolerations:
       {{- range .Values.tolerations }}

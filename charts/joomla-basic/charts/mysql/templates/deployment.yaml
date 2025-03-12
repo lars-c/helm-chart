@@ -24,13 +24,13 @@ spec:
         name: mysql
         env:
         - name: MYSQL_HOST
-          value: {{ include "common.dbhostname" . }}
+          value: {{ .Values.global.joomlaDbHost }}
         - name: MYSQL_DATABASE
-          value: {{ include "common.dbname" . }}
+          value: {{ .Values.global.dbname}}
         - name: MYSQL_TCP_PORT
           value: {{ include "common.joomlaEnvDbPort" . }}
         - name: MYSQL_USER
-          value: {{ include "common.global.dbuser" . }}
+          value: {{ .Values.global.dbuser }}
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -59,39 +59,13 @@ spec:
         volumeMounts:
         - name: joomla-mysql-persistent-storage
           mountPath: /var/lib/mysql
-      {{- if .Values.debug.enabled }}
-      - image: busybox
-        name: probe-logger
-        command:
-          - sh
-          - -c
-          - |
-            while true; do
-              success=0
-              for i in {1..{{ .Values.debug.retries }}}; do
-                if nc -z -w 10 joomla-mysql {{ .Values.global.joomlaDbPort }}; then
-                  echo "$(date) - MySQL port {{ .Values.global.joomlaDbPort }} successful!"
-                  success=1
-                  break
-                fi
-                sleep 1
-              done
-
-              if [ $success -eq 0 ]; then
-                echo "$(date) - MySQL port {{ .Values.global.joomlaDbPort }} failed!"
-              fi
-              
-              sleep {{ .Values.debug.interval }};
-            done
-        resources:
-          limits:
-            cpu: "10m"
-            memory: "16Mi"      
-      {{- end }}
       volumes: 
       - name: joomla-mysql-persistent-storage
         persistentVolumeClaim:
           claimName: joomla-mysql-pv-claim
+      - name: log-volume
+        emptyDir:
+          sizeLimit: "50Mi"
       {{- if .Values.tolerationsEnabled }}
       tolerations:
       {{- range .Values.tolerations }}

@@ -23,7 +23,7 @@ Return DB NAME value (JOOMLA_DB_NAME MYSQL_DATABASE)
 {{/*
 Return MYSQL_ROOT_PASSWORD value
 */}}
-{{- define "common.mysql.rootpassword" -}}
+{{- define "common.rootpassword" -}}
 {{- if .Values.auth.rootdbpassword }}
     {{- printf .Values.auth.rootdbpassword | b64enc -}}
 {{- else -}}
@@ -34,7 +34,7 @@ Return MYSQL_ROOT_PASSWORD value
 {{/*
 Return JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
 */}}
-{{- define "common.global.dbpassword" -}}
+{{- define "common.dbpassword" -}}
 {{- if .Values.global.dbpassword }}
     {{- printf .Values.global.dbpassword | b64enc -}}
 {{- else -}}
