@@ -68,18 +68,18 @@ spec:
             if [ ! -f "/var/www/html/configuration.php" ]; then
               echo "$(date) Running Joomla CLI installer..." | tee -a /var/log/cli-installer.log
               php /var/www/html/installation/joomla.php install \
-              --site-name=Site-Name \
-              --admin-user=Karen \
-              --admin-username=karen126 \
-              --admin-password=Garbage1n0ut \
-              --admin-email=karens@mail.dk \
-              --db-type=mysqli \
-              --db-host=joomla-mysql \
-              --db-user=joomla \
-              --db-pass=dbpassword \
-              --db-name=joomla_db \
-              --db-prefix=w7amf_ \
-              --db-encryption=0 \
+              --site-name={{ .Values.cli.siteName | quote }} \
+              --admin-user={{ .Values.cli.adminUser | quote }} \
+              --admin-username={{ .Values.cli.adminUsername | quote }} \
+              --admin-password={{ .Values.cli.adminPassword | quote }} \
+              --admin-email={{ .Values.cli.adminEmail | quote }} \
+              --db-type={{ .Values.cli.dbType }} \
+              --db-host={{ include "common.dbhostname" . }} \
+              --db-user={{ include "common.dbuser" . }} \
+              --db-pass={{ include "common.dbpassword" . }} \
+              --db-name={{ include "common.dbname" . }} \
+              --db-prefix={{ include "joomla.dbprefix" . }} \
+              --db-encryption={{ include "joomla.dbencryption" . }} \
               --public-folder="" | tee -a /var/log/cli-installer.log
               echo "$(date) Joomla installation completed." | tee -a /var/log/cli-installer.log
             else
@@ -97,11 +97,11 @@ spec:
           mountPath: /var/log
         env:
         - name: JOOMLA_DB_HOST
-          value: {{ .Values.global.joomlaDbHost }}
+          value: {{ include "common.dbhostname" . }}
         - name: JOOMLA_DB_NAME
-          value: {{ .Values.global.dbname}}
+          value: {{ include "common.dbname" . }}
         - name: JOOMLA_DB_USER
-          value: {{ .Values.global.dbuser }}
+          value: {{ include "common.dbuser" . }}
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:

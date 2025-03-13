@@ -3,9 +3,9 @@ Return DBHOST NAME value (JOOMLA_DB_HOST / MYSQL_HOST)
 */}}
 {{- define "common.dbhostname" -}}
 {{- if .Values.global.joomlaDbHost }}
-    {{- printf .Values.global.joomlaDbHost | quote -}}
+    {{- printf .Values.global.joomlaDbHost -}}
 {{- else -}}
-    {{- printf "joomla-mysql" | quote -}}
+    {{- printf "joomla-mysql" -}}
 {{- end -}}
 {{- end -}}
 
@@ -14,9 +14,9 @@ Return DB NAME value (JOOMLA_DB_NAME MYSQL_DATABASE)
 */}} 
 {{- define "common.dbname" -}}
 {{- if .Values.global.dbname }}
-    {{- printf .Values.global.dbname | quote -}}
+    {{- printf .Values.global.dbname -}}
 {{- else -}}
-    {{- printf "joomla-db" | quote -}}
+    {{- printf "joomla-db" -}}
 {{- end -}}
 {{- end -}}
 
@@ -33,8 +33,20 @@ Return MYSQL_ROOT_PASSWORD value
 
 {{/*
 Return JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
+For CLI installation
 */}}
 {{- define "common.dbpassword" -}}
+{{- if .Values.global.dbpassword }}
+    {{- printf .Values.global.dbpassword -}}
+{{- else -}}
+    {{- printf (randAlphaNum 16) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return base64 JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
+*/}}
+{{- define "common.dbpassword.secret" -}}
 {{- if .Values.global.dbpassword }}
     {{- printf .Values.global.dbpassword | b64enc -}}
 {{- else -}}
@@ -45,11 +57,11 @@ Return JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
 {{/*
 Return DB USER value (JOOMLA_DB_USER)
 */}} 
-{{- define "common.global.dbuser" -}}
+{{- define "common.dbuser" -}}
 {{- if .Values.global.dbuser }}
-    {{- printf .Values.global.dbuser | quote -}}
+    {{- printf .Values.global.dbuser -}}
 {{- else -}}
-    {{- printf "joomla" | quote -}}
+    {{- printf "joomla" -}}
 {{- end -}}
 {{- end -}}
 
@@ -75,7 +87,7 @@ Return MYSQL PORT (containerPort) as an integer
 {{/*
 Return MYSQL PORT (MYSQL_TCP_PORT) as a quoted string
 */}}
-{{- define "common.joomlaEnvDbPort" -}}
+{{- define "common.joomlaDbPortStr" -}}
 {{- include "common.validateDbPort" . | quote -}}
 {{- end -}}
 

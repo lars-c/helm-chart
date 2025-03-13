@@ -24,13 +24,13 @@ spec:
         name: mysql
         env:
         - name: MYSQL_HOST
-          value: {{ .Values.global.joomlaDbHost }}
+          value: {{ include "common.dbhostname" . }}
         - name: MYSQL_DATABASE
-          value: {{ .Values.global.dbname}}
+          value: {{ include "common.dbname" . }}
         - name: MYSQL_TCP_PORT
-          value: {{ include "common.joomlaEnvDbPort" . }}
+          value: {{ include "common.joomlaDbPortStr" . }}
         - name: MYSQL_USER
-          value: {{ .Values.global.dbuser }}
+          value: {{ include "common.dbuser" . }}
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:

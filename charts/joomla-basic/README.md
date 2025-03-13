@@ -23,6 +23,13 @@ Sub-charts:
   MySQL
   Common
 ```
+#### CLI
+```console
+Enable CLI for automatic installer (default false)
+cli:
+  enabled: true
+
+```
 
 #### initContainers
 ```console

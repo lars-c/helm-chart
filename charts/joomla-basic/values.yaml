@@ -65,7 +65,7 @@ cli:
   ## Enable Joomla CLI install
   enabled: true
   ## Name of the website
-  siteName: "Basic Joomla"
+  siteName: "Joomla Basic"
   ## Real name of the Super User account
   adminUser: "Karen"
   ## Username for the Super User account
@@ -265,13 +265,6 @@ mysql:
     repository: mysql
     tag: "8.0"
     pullPolicy: IfNotPresent
-  ## Eanble debug mode for MySQL service port. Default is false
-  ## If enabled, the test will be performed every interval seconds each time, up to retries times.
-  ##
-  debug: 
-    enabled: true
-    interval: 5
-    retries: 5
   ##
   auth:
     ## MYSQL_ROOT_PASS

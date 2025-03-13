@@ -23,3 +23,16 @@ If a manual prefix is provided, use it. Otherwise, generate a random one.
     {{- printf "%s" $dbPrefix -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return db encryption value
+Test if cli.dbEncryption er 1, 2 or 3
+*/}} 
+{{- define "joomla.dbencryption" -}}
+{{- $dbencryption := toString .Values.cli.dbEncryption -}}
+{{- if has $dbencryption (list "0" "1" "2") -}}
+    {{- printf "%s" $dbencryption -}}
+{{- else -}}
+    {{- fail  (printf "Invalid value '%s': must be one of '0', '1', or '2'" .Values.cli.dbEncryption) -}}
+{{- end -}}
+{{- end -}}
