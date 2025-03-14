@@ -80,7 +80,7 @@ spec:
               --db-name={{ include "common.dbname" . }} \
               --db-prefix={{ include "joomla.dbprefix" . }} \
               --db-encryption={{ include "joomla.dbencryption" . }} \
-              --public-folder="" | tee -a /var/log/cli-installer.log
+              --public-folder={{ .Values.cli.publicFolder }} | tee -a /var/log/cli-installer.log
               echo "$(date) Joomla installation completed." | tee -a /var/log/cli-installer.log
             else
               echo "$(data) Joomla already installed. Skipping installation." | tee -a /var/log/cli-installer.log

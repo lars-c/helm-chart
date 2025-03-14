@@ -91,8 +91,6 @@ Return MYSQL PORT (MYSQL_TCP_PORT) as a quoted string
 {{- include "common.validateDbPort" . | quote -}}
 {{- end -}}
 
-
-
 {{/*
 Return preferred or required node Affinity
 */}} 
