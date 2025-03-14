@@ -14,6 +14,26 @@ entries:
   joomla-basic:
   - apiVersion: v2
     appVersion: 5.2.3
+    created: "2025-03-14T16:00:31.679042094Z"
+    dependencies:
+    - name: common
+      repository: file://./charts/common
+      version: 1.0.0
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 1.0.0
+    description: Basic Helm chart for Joomla
+    digest: 150f4023158378546f601a46d3253b02b265f7c25109f090c238edcf6d75dec1
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: joomla-basic
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-basic-0.3.4/joomla-basic-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
+    appVersion: 5.2.3
     created: "2025-03-14T08:44:20.012272613Z"
     dependencies:
     - name: common
@@ -516,4 +536,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.0/nginx-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-14T08:44:20.012458481Z"
+generated: "2025-03-14T16:00:31.679188847Z"
