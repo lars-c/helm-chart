@@ -129,7 +129,7 @@ affinity:
       values:
         - green  
 ## nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+# Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}       
 ## Tolerations for pod assignment
@@ -145,19 +145,20 @@ tolerations:
     value: "orange"
     effect: "NoSchedule"
 #### Set container requests and limits for resources
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
 ##
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-## Configure Pods Security Context
+resources:
+  enableLimit: false
+  limits:
+    memory: "768Mi"
+    cpu: "500m"
+  enableRequest: true
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
 ##
 podSecurityContext:
   enabled: true
@@ -192,7 +193,7 @@ startupProbe:
   failureThreshold: 1
 ##
 livenessProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -265,6 +266,20 @@ mysql:
     repository: mysql
     tag: "8.0"
     pullPolicy: IfNotPresent
+  ##
+  #### Set container requests and limits for resources
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. 
+  ##
+  resources:
+    enableLimit: false
+    limits:
+      memory: "768Mi"
+      cpu: "500m"
+    enableRequest: true
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
   ##
   auth:
     ## MYSQL_ROOT_PASS

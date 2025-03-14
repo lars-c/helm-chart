@@ -90,6 +90,17 @@ spec:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: joomla
+        resources:
+          {{- if .Values.resources.enableLimit }}
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          {{- end }}
+          {{- if .Values.resources.enableRequest }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          {{- end }}
         volumeMounts:
         - name: joomla-persistent-storage
           mountPath: /var/www/html
