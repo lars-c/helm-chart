@@ -5,48 +5,34 @@
 [Joomla!](http://www.joomla.org/)
 
 ## Limitations
-```txt
+
 ℹ️ Note:
 This Joomla Helm chart is actively under development. While created carefully, it likely contains mistakes or unclear configurations. Please verify settings before deployment and feel free to contribute suggestions or improvements.
 
 ⚠️ Notice:
 This Helm chart is created to the best of my current knowledge but may contain errors or incomplete configurations. Documentation might not cover all scenarios fully. Use with care, and contributions or feedback are welcome!
-```
 
 ### Images
-```console
+```txt
 Dockerhub Joomla  official image tag: "php8.3-apache" (https://hub.docker.com/_/joomla)
 Dockerhub MySQL   official image tag: "8.0" (https://hub.docker.com/_/mysql)
 ```
 
-### Charts
-```console
+### Charts and subcharts
+```txt
 Joomla
 Sub-charts:
   MySQL
   Common
 ```
+
 #### CLI
-```console
 Enable CLI for automatic installer (default false)
-```
 ```yaml
 cli:
   enabled: true
 ```
 
-### initContainers
-```console
-0) joomla-bootstrap (If CLI install is enabled):
-  joomla-bootstrap will copy files from  /usr/src/joomla/ to /var/www/html/. Necessary for the CLI installer to run correctly.
-  Log file: /var/log/joomla-bootstrap.log
-1) joomla-installer (If CLI install is enabled):
-  Will run the actual Joomla CLI installer.
-  Log file: /var/log/cli-installer.log
-2) mysql-check:
-  Test MYSQL port for availability before going ahead and installing Joomla.
-  Log file: /var/log/mysql-check.log
-```
 ### 🛠️ **Init Containers**
 
 These containers perform initial setup tasks before the main Joomla container starts:
@@ -69,11 +55,10 @@ global:
 ```
 
 ### Joomla CLI Installation (optional)
-```console
 Reference: Joomla CLI Installation Guide https://jdocmanual.org/en/jdocmanual?article=user/command-line-interface/joomla-cli-installation
 
 CLI installation enables automatic initial setup of Joomla. If cli.enabled: true, Joomla will skip the web-based installation wizard and perform a fully automatic install based on these settings:
-```
+
 ```yaml
 cli:
   enabled: true                       # Enable automatic Joomla installation via CLI (default: false)
@@ -89,17 +74,27 @@ cli:
 
 ```
 
-### updateStrategy (default)
-```console
-```
+### updateStrategy
+This Helm chart uses the update strategy Recreate by default:
+
+Recreate (default):
+>Terminates all running pods before creating new ones.
+This strategy is recommended when using Persistent Volume Claims (PVCs) with access mode ReadWriteOnce (RWO), as it ensures safe detachment and reattachment of storage, preventing conflicts. The downside is brief downtime between updates, which is acceptable for most standard Joomla installations.
+
+Alternative strategy (if minimal downtime is required):
+
+RollingUpdate (optional):
+> Gradually replaces pods one by one, minimizing downtime. However, with PVCs using RWO mode, RollingUpdate can result in pod scheduling errors or conflicts during updates, since two pods cannot attach to the same volume simultaneously. Use this only if your storage configuration supports it (e.g., PVCs with ReadWriteMany (RWX)).
+
 ```yaml
-  type: Recreate
+  updateStrategy:
+    type: Recreate         # default recommended
+    # type: RollingUpdate  # only use if PVC supports RWX access mode
 ```
 
-### joomla persistence (default)
-```console
+### joomla persistence
 Persistence (enabled: true) ensures data is retained across pod restarts. Disabling results in data loss upon pod deletion.
-```
+
 ```yaml
   enabled: true
   storageClass: "local-path"
@@ -107,9 +102,8 @@ Persistence (enabled: true) ensures data is retained across pod restarts. Disabl
 ```
 
 ### joomla service (default)
-```console
 type: LoadBalancer exposes Joomla externally through a cloud provider's load balancer. Consider ClusterIP or NodePort for internal/test environments.
-```
+
 ```yaml
   type: LoadBalancer
   port: 80
@@ -118,23 +112,62 @@ type: LoadBalancer exposes Joomla externally through a cloud provider's load bal
 ```
 
 ### ingress (not tested)
-```console
-Ingress configuration placeholder (currently untested). Contributions or tests are encouraged.
+Ingress configuration depends heavily on the ingress controller installed in your Kubernetes cluster (e.g., Traefik, NGINX).
+
+⚠️ Currently untested:
+Ingress support hasn't yet been tested for this Helm chart.
+Contributions of tested configurations and examples for different ingress controllers are highly encouraged.
+
+```yaml
+ingress:
+  enabled: false
+  className: ""       # e.g., "nginx"
+  annotations: {}     # controller-specific annotations
+  hosts:
+    - host: example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
 ```
 
-### Joomla probes (default)
-```console
-```
+### Joomla probes
+Probes let Kubernetes monitor the health and availability of your Joomla pods.
+|Probe Type     |  Default   |  Purpose / Consequences   |
+| --- | --- | --- |
+| startupProbe    | ❌ Disabled    | Checks if the container has started successfully. A failing startupProbe triggers container restarts during initial pod startup.  |
+| livenessProbe   | ✅ Enabled     | Checks regularly if the container is running correctly. A failing livenessProbe will cause Kubernetes to restart the pod.   |
+| readinessProbe  | ❌ Disabled    | Checks if the pod is ready to serve traffic. A failing readinessProbe temporarily removes the pod from load balancing until the probe succeeds again, without restarting it.    |
+
+Default Probe Values:
 ```yaml
-  startupProbe
-  livenessProbe (enabled)
-  readinessProbe
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 600   # Wait 600 sec before first probe (default: 0)
+  periodSeconds: 15          # Check every 15 sec (default: 10)
+  timeoutSeconds: 5          # Must respond within 5 sec (default: 1)
+  successThreshold: 6        # Successes required to mark healthy (default: 1)
+  failureThreshold: 1        # Failures required to mark unhealthy (default: 3)
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 600   # Wait 600 sec before first probe
+  periodSeconds: 10          # Check every 10 sec
+  timeoutSeconds: 5          # Must respond within 5 sec
+  failureThreshold: 6        # Failures required to restart pod
+  successThreshold: 1        # Successes required to confirm healthy
+
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 30    # Wait 30 sec before first probe
+  periodSeconds: 5           # Check every 5 sec
+  timeoutSeconds: 3          # Must respond within 3 sec
+  failureThreshold: 6        # Failures required to remove from service endpoints
+  successThreshold: 1        # Successes required to confirm ready
 ```
 
 ### tolerations (default enabled)
-```console
 Default tolerations allow scheduling on nodes labeled gray or orange. Modify as needed to match your node labels.
-```
 ```yaml
     - key: "key1"
       operator: "Equal"
@@ -147,16 +180,15 @@ Default tolerations allow scheduling on nodes labeled gray or orange. Modify as 
 ```
 
 ### affinity (default enabled)
-```console
 Affinity rules control scheduling preferences for Kubernetes nodes. Default settings prefer nodes labeled green, then pink. Adjust or disable based on your cluster.
-
-Enable(+)/Disable(-)
-Both preferred and required. 
-preferred (+) required (-) : preferred
-preferred (-) required (+) : required
-preferred (+) required (+) : preferred
-preferred (-) required (-) : preferred
+```console
+Enable(✅)/Disable(❌)
+preferred (✅) required (❌)  : preferred
+preferred (❌) required (✅)  : required
+preferred (✅) required (✅)  : preferred
+preferred (❌) required (❌)  : preferred
 ```
+Explanation: If preferred and required is both enabled (by mistake), then preferred is chosen as both cannot be enabled at the same time.
 ```yaml
 preferredDuringSchedulingIgnoredDuringExecution:
     - weight: 1
@@ -175,6 +207,120 @@ requiredDuringSchedulingIgnoredDuringExecution:
     values:
         - green
 ```
-### MySQL (default)
+### 🐬 MySQL Configuration
+This chart deploys MySQL using the official Docker image.
+
+### image
+Specifies the MySQL Docker image and tag. See Docker Hub: MySQL for available tags (https://hub.docker.com/_/mysql).
+
+```yaml
+  image:
+    repository: mysql
+    tag: "8.0"
+```    
+### Resource Configuration
+Configure CPU and memory resources for the MySQL container. Adjust resource values according to your cluster capacity and MySQL workload requirements.
+
+``` yaml
+resources:
+  enableLimit: false           # Limits disabled by default to prevent unintended pod restarts
+  limits:
+    memory: "768Mi"
+    cpu: "500m"
+  enableRequest: true          # Requests enabled by default for scheduling
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+```
+⚠️ Recommendation:
+Start without resource limits (enableLimit: false) and monitor MySQL resource usage over time.
+Once stable usage metrics are available, set appropriate limits. Setting restrictive limits prematurely can cause unexpected pod restarts, affecting Joomla’s stability.
+
+### MySQL Authentication
+
+Root Password
+
+Sets the root user password for MySQL (MYSQL_ROOT_PASSWORD).  
+This value must be provided. Ensure it's secure.
+
+Ref.: MySQL Documentation - MYSQL_ROOT_PASSWORD (https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html)
+```yaml
+  auth:
+    rootdbpassword: "bxJK8Q1wd9ZFeDO8bOKbQ9CN"
+```    
+### MySQL Timezone
+Defines the default timezone used by MySQL. Set this to match your local or required timezone.
+
+Ref.: MySQL Documentation - TZ (https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html)
+```yaml
+  timezone: "Europe/Copenhagen"
+```
+
+### Persistence
+Persistence ensures data is retained across pod restarts. Disabling results in data loss upon pod deletion. Size describe the initial size (not max)
+
+```yaml
+  enabled: true
+  storageClass: "local-path"
+  accessModes: "ReadWriteOnce"
+  size: 2Gi                          # A PVC of 2GB will be created
+```
+### tolerations (deafult enabled)
+Default tolerations allow scheduling the MySQL pod on nodes labeled gray or orange. Modify as needed to match your node labels.
+```yaml
+  tolerationsEnabled: true
+  tolerations:
+    - key: "key1"
+      operator: "Equal"
+      value: "gray"
+      effect: "NoSchedule"
+    - key: "key1"
+      operator: "Equal"
+      value: "orange"
+      effect: "NoSchedule"
+```
+### affinity (default preferred enabled)
+Affinity rules control scheduling preferences for Kubernetes nodes. Default settings prefer nodes labeled green 5x than nodes labeled pink. Adjust or disable based on your cluster labels.
 ```console
+Enable(✅)/Disable(❌)
+preferred (✅) required (❌)  : preferred
+preferred (❌) required (✅)  : required
+preferred (✅) required (✅)  : preferred
+preferred (❌) required (❌)  : preferred
+```
+Explanation: If preferred and required is both enabled (by mistake), then preferred is chosen as both cannot be enabled at the same time.
+```yaml
+preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+    key: color
+    operator: In
+    values:
+        - pink
+    - weight: 5
+    key: color
+    operator: In
+    values:
+        - green
+requiredDuringSchedulingIgnoredDuringExecution:
+    - key: color
+    operator: In
+    values:
+        - green
+```
+### MySQL livenessProbe
+Probes let Kubernetes monitor the health and availability of your MySQL pod.
+|Probe Type     |  Default   |  Purpose / Consequences   |
+| --- | --- | --- |
+| livenessProbe   | ✅ Enabled     | Checks regularly if the container is running correctly. A failing livenessProbe will cause Kubernetes to restart the pod.   |
+
+
+Default Probe Values:
+```yaml
+livenessProbe:
+  enabled: true              # disable/enable MySQL livenessProbe
+  initialDelaySeconds: 600   # Wait 600 sec before first probe
+  periodSeconds: 10          # Check every 10 sec
+  timeoutSeconds: 5          # Must respond within 5 sec
+  failureThreshold: 6        # Failures required to restart pod
+  successThreshold: 1        # Successes required to confirm healthy
 ```
