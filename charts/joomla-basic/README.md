@@ -101,7 +101,7 @@ Persistence (enabled: true) ensures data is retained across pod restarts. Disabl
   accessModes: "ReadWriteOnce"
 ```
 
-### joomla service (default)
+### joomla service
 type: LoadBalancer exposes Joomla externally through a cloud provider's load balancer. Consider ClusterIP or NodePort for internal/test environments.
 
 ```yaml
