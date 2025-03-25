@@ -181,14 +181,18 @@ Default tolerations allow scheduling on nodes labeled gray or orange. Modify as 
 
 ### affinity (default enabled)
 Affinity rules control scheduling preferences for Kubernetes nodes. Default settings prefer nodes labeled green, then pink. Adjust or disable based on your cluster.
-```console
-Enable(✅)/Disable(❌)
-preferred (✅) required (❌)  : preferred
-preferred (❌) required (✅)  : required
-preferred (✅) required (✅)  : preferred
-preferred (❌) required (❌)  : preferred
-```
-Explanation: If preferred and required is both enabled (by mistake), then preferred is chosen as both cannot be enabled at the same time.
+
+| Preferred | Requested | Result |
+| --- | --- | ---|
+| ✅ | ❌ | preferred | 
+| ❌ | ✅ | required |
+| ✅ | ✅ (invalid)| defaults to preferred |
+| ❌ | ❌ (invalid)| defaults to preferred |
+
+
+⚠️ Note:  
+Both "preferred" and "required" affinity cannot logically coexist. If both are accidentally enabled, the Helm chart defaults to "preferred" affinity.
+
 ```yaml
 preferredDuringSchedulingIgnoredDuringExecution:
     - weight: 1
@@ -257,16 +261,18 @@ Ref.: MySQL Documentation - TZ (https://dev.mysql.com/doc/refman/8.0/en/environm
 ```
 
 ### Persistence
-Persistence ensures data is retained across pod restarts. Disabling results in data loss upon pod deletion. Size describe the initial size (not max)
+Persistence ensures data is retained across pod restarts. Disabling persistence will cause data loss upon pod deletion.  
+The size defines the initial storage request (not maximum size):
 
 ```yaml
+persistence:
   enabled: true
   storageClass: "local-path"
   accessModes: "ReadWriteOnce"
-  size: 2Gi                          # A PVC of 2GB will be created
+  size: 2Gi  # Creates a 2GB Persistent Volume Claim (PVC)  
 ```
-### tolerations (deafult enabled)
-Default tolerations allow scheduling the MySQL pod on nodes labeled gray or orange. Modify as needed to match your node labels.
+### tolerations (enabled by default)
+Default tolerations allow scheduling of the MySQL pod on nodes labeled gray or orange. Modify or disable as needed to match your node labels.
 ```yaml
   tolerationsEnabled: true
   tolerations:
@@ -279,16 +285,21 @@ Default tolerations allow scheduling the MySQL pod on nodes labeled gray or oran
       value: "orange"
       effect: "NoSchedule"
 ```
-### affinity (default preferred enabled)
-Affinity rules control scheduling preferences for Kubernetes nodes. Default settings prefer nodes labeled green 5x than nodes labeled pink. Adjust or disable based on your cluster labels.
-```console
-Enable(✅)/Disable(❌)
-preferred (✅) required (❌)  : preferred
-preferred (❌) required (✅)  : required
-preferred (✅) required (✅)  : preferred
-preferred (❌) required (❌)  : preferred
-```
-Explanation: If preferred and required is both enabled (by mistake), then preferred is chosen as both cannot be enabled at the same time.
+### affinity (preferred scheduling by default)
+Affinity rules control Kubernetes node scheduling preferences. By default, scheduling strongly prefers nodes labeled green over those labeled pink (5x more weight). Adjust or disable affinity according to your cluster's labeling.
+
+| Preferred | Requested | Result |
+| --- | --- | ---|
+| ✅ | ❌ | preferred | 
+| ❌ | ✅ | required |
+| ✅ | ✅ (invalid)| defaults to preferred |
+| ❌ | ❌ (invalid)| defaults to preferred |
+
+
+⚠️ Note:  
+Both "preferred" and "required" affinity cannot logically coexist. If both are accidentally enabled, the Helm chart defaults to "preferred" affinity.
+
+
 ```yaml
 preferredDuringSchedulingIgnoredDuringExecution:
     - weight: 1
@@ -313,11 +324,10 @@ Probes let Kubernetes monitor the health and availability of your MySQL pod.
 | --- | --- | --- |
 | livenessProbe   | ✅ Enabled     | Checks regularly if the container is running correctly. A failing livenessProbe will cause Kubernetes to restart the pod.   |
 
-
 Default Probe Values:
 ```yaml
 livenessProbe:
-  enabled: true              # disable/enable MySQL livenessProbe
+  enabled: true              # enable or disable MySQL liveness probe
   initialDelaySeconds: 600   # Wait 600 sec before first probe
   periodSeconds: 10          # Check every 10 sec
   timeoutSeconds: 5          # Must respond within 5 sec
