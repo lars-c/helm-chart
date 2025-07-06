@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla-mysql
+  namespace: joomla
+  labels:
+    app: joomla
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: mysql
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: mysql
+        resources:
+          {{- if .Values.resources.enableLimit }}
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          {{- end }}
+          {{- if .Values.resources.enableRequest }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          {{- end }}              
+        env:
+        - name: MYSQL_DATABASE
+          value: {{ .Values.global.dbname }}
+        - name: MYSQL_USER
+          value: {{ .Values.global.dbuser }}
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.global.secrets.dbuserPassword }}
+              key: password
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.global.secrets.dbuserPassword }}
+              key: root-password
+        - name: TZ
+          value: {{ .Values.timezone }}
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: joomla-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes: 
+      - name: joomla-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-data
+      
