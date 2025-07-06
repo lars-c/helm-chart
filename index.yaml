@@ -14,6 +14,26 @@ entries:
   joomla-basic:
   - apiVersion: v2
     appVersion: 5.2.3
+    created: "2025-07-06T11:55:28.957407514Z"
+    dependencies:
+    - name: common
+      repository: file://./charts/common
+      version: 1.0.0
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 1.0.0
+    description: Basic Helm chart for Joomla
+    digest: ef487e901385c497a9264a82f5c1cb16126e80684004fb998908e5dee814dc74
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: joomla-basic
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-basic-0.4.0/joomla-basic-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
+    appVersion: 5.2.3
     created: "2025-03-25T14:04:21.857247743Z"
     dependencies:
     - name: common
@@ -592,6 +612,25 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/joomla-basic-0.1.1/joomla-basic-0.1.1.tgz
     version: 0.1.1
+  joomla-inetpub:
+  - apiVersion: v2
+    appVersion: 5.3.0
+    created: "2025-07-06T11:55:29.057312846Z"
+    dependencies:
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 0.1.0
+    description: A Helm chart for Kubernetes
+    digest: 8565c088e4ea282b3422a7519e4c69537acd59beb3ff9d411c983ef56fc146ab
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: main-t@post.dk
+      name: main-t
+    name: joomla-inetpub
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-inetpub-0.1.0/joomla-inetpub-0.1.0.tgz
+    version: 0.1.0
   mysql-basic:
   - apiVersion: v2
     appVersion: 9.1.0
@@ -636,4 +675,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.0/nginx-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-25T14:04:21.857512176Z"
+generated: "2025-07-06T11:55:29.057649179Z"
