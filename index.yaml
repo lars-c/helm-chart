@@ -3,6 +3,20 @@ entries:
   busybox:
   - apiVersion: v2
     appVersion: 1.37.0
+    created: "2025-07-23T12:00:41.186944171Z"
+    description: A test chart for busybox
+    digest: ca0f83a8464f2b57ce3b0054811508edaa117647681729a183bfccf1f862bde8
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: busybox
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/busybox-0.1.1/busybox-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.37.0
     created: "2025-07-23T11:45:24.940278648Z"
     description: A test chart for busybox
     digest: 88a00c06da7cfa64c74a73fcbbdafcbdda908924276c04d51ea8802821c89c6c
@@ -690,4 +704,15 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.0/nginx-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-23T11:45:24.940359332Z"
+  temp:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-07-23T12:00:41.318366187Z"
+    description: A Helm chart for Kubernetes
+    digest: 78b384407da759eda1cce2b4c8a4968ef863eea83a45e60912605d341e3cd62b
+    name: temp
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-07-23T12:00:41.318474965Z"
