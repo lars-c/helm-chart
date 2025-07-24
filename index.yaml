@@ -3,6 +3,20 @@ entries:
   busybox:
   - apiVersion: v2
     appVersion: 1.37.0
+    created: "2025-07-24T08:07:43.069289212Z"
+    description: A test chart for busybox
+    digest: 250d2a85521ce39e242bda3c2afa6ab9b08d4e6798d27d1d28e3a7f60f7ac0ac
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/busybox96-00.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: busybox
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/busybox-0.1.2/busybox-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.37.0
     created: "2025-07-23T12:00:41.186944171Z"
     description: A test chart for busybox
     digest: ca0f83a8464f2b57ce3b0054811508edaa117647681729a183bfccf1f862bde8
@@ -715,4 +729,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-23T12:00:41.318474965Z"
+generated: "2025-07-24T08:07:43.069380363Z"
