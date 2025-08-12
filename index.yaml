@@ -3,6 +3,20 @@ entries:
   busybox:
   - apiVersion: v2
     appVersion: 1.37.0
+    created: "2025-08-12T15:12:24.008863173Z"
+    description: A test chart for busybox
+    digest: 41662670f743d04b893a64d18f1db6572c0efb7e84383cfa35911ed671478a7f
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/busybox96-00.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: busybox
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/busybox-0.1.3/busybox-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.37.0
     created: "2025-07-24T08:07:43.069289212Z"
     description: A test chart for busybox
     digest: 250d2a85521ce39e242bda3c2afa6ab9b08d4e6798d27d1d28e3a7f60f7ac0ac
@@ -55,6 +69,26 @@ entries:
     - https://github.com/lars-c/helm-chart/releases/download/demo-chart-test-0.1.1/demo-chart-test-0.1.1.tgz
     version: 0.1.1
   joomla-basic:
+  - apiVersion: v2
+    appVersion: 5.2.3
+    created: "2025-08-12T15:12:24.189880067Z"
+    dependencies:
+    - name: common
+      repository: file://./charts/common
+      version: 1.0.0
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 1.0.0
+    description: Basic Helm chart for Joomla
+    digest: 39abb79708a6fe47af28c58159524a1c5013c9c7c200de810e6dd291525ac563
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+    maintainers:
+    - email: larsc@inetpub.dk
+      name: lars-c
+    name: joomla-basic
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-basic-0.4.1/joomla-basic-0.4.1.tgz
+    version: 0.4.1
   - apiVersion: v2
     appVersion: 5.2.3
     created: "2025-07-06T11:55:28.957407514Z"
@@ -729,4 +763,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-24T08:07:43.069380363Z"
+generated: "2025-08-12T15:12:24.190233942Z"
