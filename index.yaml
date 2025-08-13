@@ -726,6 +726,24 @@ entries:
   joomla-inetpub:
   - apiVersion: v2
     appVersion: 5.3.0
+    created: "2025-08-13T07:14:14.115307387Z"
+    dependencies:
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 0.1.0
+    description: A Helm chart for Kubernetes
+    digest: e365d47ab55692b5a355b3b91604fe0f3bf297570f20c9660846dbf515170d01
+    icon: https://img.icons8.com/color/48/public--v1.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: joomla-inetpub
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-inetpub-0.1.1/joomla-inetpub-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 5.3.0
     created: "2025-07-06T11:55:29.057312846Z"
     dependencies:
     - name: mysql
@@ -797,4 +815,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-08-13T07:10:46.151935357Z"
+generated: "2025-08-13T07:14:14.115396343Z"
