@@ -1,13 +1,13 @@
 apiVersion: v2
 name: busybox
 description: A test chart for busybox
-version: 0.1.3
+version: 0.1.4
 appVersion: "1.37.0"
 type: application
 
 icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/busybox96-00.png
 maintainers:
-- email: larsc@inetpub.dk
-  name: lars-c
+- email: oss-maint@inetpub.dk
+  name: oss-maintainer
 
 
