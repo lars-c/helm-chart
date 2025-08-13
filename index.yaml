@@ -781,6 +781,20 @@ entries:
   mysql-basic:
   - apiVersion: v2
     appVersion: 9.1.0
+    created: "2025-08-13T07:25:58.677269111Z"
+    description: Test MySQL Helm chart
+    digest: 6dabf91eed0d479d030b92e321da83fce301a39aee706b75820e9abaa447bad3
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mysql128-0.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mysql-basic
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mysql-basic-0.1.2/mysql-basic-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 9.1.0
     created: "2024-11-09T16:52:12.744031304Z"
     description: Test MySQL Helm chart
     digest: 4ed2b78ccecf1260001001b94368512722037cc78421d35e02b3a314e736c0e2
@@ -833,4 +847,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-08-13T07:17:07.132809115Z"
+generated: "2025-08-13T07:25:58.67737536Z"
