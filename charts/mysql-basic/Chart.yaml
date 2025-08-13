@@ -3,10 +3,10 @@ name: mysql-basic
 description: Test MySQL Helm chart
 
 type: application
-version: 0.1.1
+version: 0.1.2
 appVersion: "9.1.0"
 
-icon: https://img.icons8.com/color/48/public--v1.png
+icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mysql128-0.png
 maintainers:
 - email: oss-maint@inetpub.dk
   name: oss-maintainer
