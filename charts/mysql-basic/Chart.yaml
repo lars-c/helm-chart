@@ -8,5 +8,5 @@ appVersion: "9.1.0"
 
 icon: https://img.icons8.com/color/48/public--v1.png
 maintainers:
-- email: larsc@inetpub.dk
-  name: lars-c
+- email: oss-maint@inetpub.dk
+  name: oss-maintainer
