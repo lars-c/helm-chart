@@ -781,6 +781,20 @@ entries:
   mongodb-basic:
   - apiVersion: v2
     appVersion: 8.0.12
+    created: "2025-09-16T15:10:01.040580054Z"
+    description: A Helm chart for Kubernetes
+    digest: f97fcc74bc5c263345e3792dda9a00dfde24085f2eb999d9b15a287476cccbde
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mongodb-basic
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mongodb-basic-0.1.1/mongodb-basic-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 8.0.12
     created: "2025-09-16T14:51:17.885239554Z"
     description: A Helm chart for Kubernetes
     digest: e9ce8035f4dba67e7c0c06a424ed52526521a5160140bd53ab2ef0d3d5d4fb33
@@ -862,4 +876,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-09-16T14:51:17.885352216Z"
+generated: "2025-09-16T15:10:01.040682012Z"
