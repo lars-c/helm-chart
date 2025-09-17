@@ -84,7 +84,50 @@ spec:
         value: {{ .value }}
         effect: {{ .effect }}
       {{- end }}
-      {{- end }}                       
+      {{- end }}
+      {{- if .Values.affinity.enabled }}
+      affinity:
+        nodeAffinity:
+          {{- if and .Values.affinity.preferred (not .Values.affinity.required) }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{- range .Values.affinity.preferredDuringSchedulingIgnoredDuringExecution }}
+          - weight: {{ .weight }}
+            preference:
+              matchExpressions:
+              - key: {{ .key }}
+                operator: {{ .operator }}
+                values:
+                {{- range .values }}
+                - {{ . }}
+                {{- end }}
+          {{- end }}
+          {{- else if and .Values.affinity.required (not .Values.affinity.preferred) }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+          {{- range .Values.affinity.requiredDuringSchedulingIgnoredDuringExecution }}
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+          {{- end }}
+          {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            {{- range .Values.affinity.preferredDuringSchedulingIgnoredDuringExecution }}
+            - weight: {{ .weight }}
+              preference:
+                matchExpressions:
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+            {{- end }}
+          {{- end }}
+      {{- end }}      
   volumeClaimTemplates:
   - metadata:
       name: {{ .Release.Name }}-mongodb-storage

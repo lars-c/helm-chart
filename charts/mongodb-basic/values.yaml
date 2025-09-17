@@ -94,6 +94,39 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
+## preferred (soft) and required (hard) affinity
+##
+affinity:
+  enabled: true
+  preferred: true
+  required: false
+  #
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      key: color
+      operator: In
+      values:
+        - pink
+    - weight: 5
+      key: color
+      operator: In
+      values:
+        - gray        
+    - weight: 5
+      key: color
+      operator: In
+      values:
+        - orange
+    - weight: 10
+      key: color
+      operator: In
+      values:
+        - green        
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - key: color
+      operator: In
+      values:
+        - green  
 
 ## Tolerations for pod assignment
 ##
@@ -107,8 +140,6 @@ tolerations:
     operator: "Equal"
     value: "orange"
     effect: "NoSchedule"
-
-affinity: {}
 
 # MongoDB specific values
 mongo:
