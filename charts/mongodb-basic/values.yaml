@@ -95,7 +95,18 @@ autoscaling:
 
 nodeSelector: {}
 
-tolerations: []
+## Tolerations for pod assignment
+##
+tolerationsEnabled: true
+tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "gray"
+    effect: "NoSchedule"
+  - key: "key1"
+    operator: "Equal"
+    value: "orange"
+    effect: "NoSchedule"
 
 affinity: {}
 

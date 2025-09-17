@@ -75,7 +75,16 @@ spec:
             secretName: {{ .Release.Name }}-mongodb-keyfile
             defaultMode: 0400        # tight perms on the source
         - name: keyfile
-          emptyDir: {}               # destination with correct owner/perms             
+          emptyDir: {}               # destination with correct owner/perms
+      {{- if .Values.tolerationsEnabled }}
+      tolerations:
+      {{- range .Values.tolerations }}
+      - key: {{ .key }}
+        operator: {{ .operator }}
+        value: {{ .value }}
+        effect: {{ .effect }}
+      {{- end }}
+      {{- end }}                       
   volumeClaimTemplates:
   - metadata:
       name: {{ .Release.Name }}-mongodb-storage
