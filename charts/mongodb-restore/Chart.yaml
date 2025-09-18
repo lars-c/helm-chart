@@ -1,0 +1,12 @@
+apiVersion: v2
+name: mongodb-restore
+description: Restore Job for MongoDB from NFS
+
+type: application
+version: 0.1.0
+appVersion: "8.0.12"
+
+icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+maintainers:
+- email: oss-maint@inetpub.dk
+  name: oss-maintainer

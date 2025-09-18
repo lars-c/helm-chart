@@ -1,0 +1,96 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # Use your chart's fullname helper if present; otherwise replace with a fixed name
+  name: {{ include "mongodb-restore.fullname" . | default "mongodb-restore" }}
+  labels:
+    {{- include "mongodb-restore.labels" . | nindent 4 | default "" }}
+spec:
+  # Auto-clean completed Jobs after N seconds (keeps logs around for a while)
+  ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished | default 900 }}
+  backoffLimit: {{ .Values.job.backoffLimit | default 0 }}
+  {{- with .Values.job.activeDeadlineSeconds }}
+  # Hard stop if the job runs too long (seconds)
+  activeDeadlineSeconds: {{ . }}
+  {{- end }}
+  template:
+    spec:
+      restartPolicy: Never
+      # If your cluster enforces securityContexts, uncomment and set via values:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: mongorestore
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+        # Pull creds (expect keys: MONGO_USER, MONGO_PASS)
+        envFrom:
+          - secretRef:
+              name: {{ .Release.Name }}-mongo-restore-creds
+        # Mount the PVC at /backup (must contain mongo-*.archive.gz files)
+        volumeMounts:
+          - name: restore-archives
+            mountPath: /backup
+        # Keep logs if the container errors out
+        terminationMessagePolicy: FallbackToLogsOnError
+        # Resource knobs (optional but nice)
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        command: ["/bin/bash","-lc"]
+        args:
+        - |
+          set -Eeuo pipefail
+
+          echo "== mongodb-restore job starting =="
+
+          # --- 0) Input sanity (secret must provide these) ---
+          : "${MONGO_USER:?missing MONGO_USER}"
+          : "${MONGO_PASS:?missing MONGO_PASS}"
+
+          # --- 1) Build a clean replica-set URI in-script (no whitespace surprises) ---
+          HOSTS="{{ join "," .Values.mongo.hosts }}"
+          RS="{{ .Values.mongo.replicaSet }}"
+          AUTH_DB="{{ .Values.mongo.authSource | default "admin" }}"
+          MONGO_URI="mongodb://${MONGO_USER}:${MONGO_PASS}@${HOSTS}/?replicaSet=${RS}&authSource=${AUTH_DB}"
+
+          # Show URI safely + visibly (escape whitespace and redact password)
+          safe="${MONGO_URI/:${MONGO_PASS}@/:******@}"
+          printf 'URI: %q\n' "$safe"
+
+          # --- 2) Pre-flight: verify connection & PRIMARY targeting ---
+          echo "Sanity: checking PRIMARY & replica set name..."
+          mongosh "$MONGO_URI" --quiet --eval '({primary: db.hello().primary, isWritablePrimary: db.hello().isWritablePrimary, setName: db.hello().setName})' \
+            || { echo "Mongo connection check failed"; exit 2; }
+
+          # --- 3) List archives and pick newest file safely ---
+          echo "Listing /backup:"
+          ls -al /backup || true
+
+          # Build a list of matching files sorted by mtime (newest first)
+          mapfile -t files < <(ls -1t /backup/mongo-*.archive.gz 2>/dev/null || true)
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo "No archives found in /backup (expected /backup/mongo-*.archive.gz)"
+            exit 3
+          fi
+          LATEST="${files[0]}"
+          echo "Restoring from: $LATEST"
+          printf 'LATEST (vis): %q\n' "$LATEST"
+
+          # --- 4) Run mongorestore ---
+          cmd=( mongorestore --uri="$MONGO_URI" --archive="$LATEST" --gzip --drop )
+          {{- if .Values.restore.useOplogReplay }}
+          cmd+=( --oplogReplay )
+          {{- end }}
+
+          echo -n "Running: "; printf '%q ' "${cmd[@]}"; echo
+          "${cmd[@]}"
+
+          echo "== mongodb-restore job completed =="
+      volumes:
+        - name: restore-archives
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-mongo-restore-pvc
