@@ -97,7 +97,7 @@ nodeSelector: {}
 ## preferred (soft) and required (hard) affinity
 ##
 affinity:
-  enabled: true
+  enabled: false
   preferred: true
   required: false
   #
@@ -130,7 +130,7 @@ affinity:
 
 ## Tolerations for pod assignment
 ##
-tolerationsEnabled: true
+tolerationsEnabled: false
 tolerations:
   - key: "key1"
     operator: "Equal"
