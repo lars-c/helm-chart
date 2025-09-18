@@ -878,6 +878,21 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/mongodb-basic-0.1.0/mongodb-basic-0.1.0.tgz
     version: 0.1.0
+  mongodb-restore:
+  - apiVersion: v2
+    appVersion: 8.0.12
+    created: "2025-09-18T13:01:25.427198577Z"
+    description: Restore Job for MongoDB from NFS
+    digest: 776753931d64506b20ab6bfd21f6d1fc3a8810aa500e2b434af196bc15c44b77
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mongodb-restore
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mongodb-restore-0.1.0/mongodb-restore-0.1.0.tgz
+    version: 0.1.0
   mysql-basic:
   - apiVersion: v2
     appVersion: 9.1.0
@@ -947,4 +962,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-09-18T08:37:38.298648102Z"
+generated: "2025-09-18T13:01:25.427303835Z"
