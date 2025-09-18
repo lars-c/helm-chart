@@ -778,6 +778,21 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/joomla-inetpub-0.1.0/joomla-inetpub-0.1.0.tgz
     version: 0.1.0
+  mongodb-backup:
+  - apiVersion: v2
+    appVersion: 8.0.12
+    created: "2025-09-18T08:37:38.298540007Z"
+    description: MongoDB(R) backup for Kubernetes
+    digest: 70ec72ecc79d07e76b80e26a9d6422e00d09ba7410e262137177f8b8186cdc89
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mongodb-backup-0.1.0/mongodb-backup-0.1.0.tgz
+    version: 0.1.0
   mongodb-basic:
   - apiVersion: v2
     appVersion: 8.0.12
@@ -932,4 +947,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-09-18T06:05:46.078143517Z"
+generated: "2025-09-18T08:37:38.298648102Z"
