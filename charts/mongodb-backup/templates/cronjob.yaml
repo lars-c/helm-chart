@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: mongodump
+            image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            envFrom:
+              - secretRef:
+                  name: {{ .Release.Name }}-mongo-backup-creds
+            command: ["/bin/bash","-lc"]
+            args:
+            - |
+              set -Eeuo pipefail
+              : "${MONGO_HOST:?missing MONGO_HOST}"
+              : "${MONGO_USER:?missing MONGO_USER}"
+              : "${MONGO_PASS:?missing MONGO_PASS}"
+
+              ts=$(date +%F_%H%M%S)
+
+              # Build the command (each flag is its own array element)
+              cmd=(
+                mongodump
+                --host "$MONGO_HOST"
+                --port 27017
+                --username "$MONGO_USER"
+                --password "$MONGO_PASS"
+                --authenticationDatabase admin
+                --archive="/backup/mongo-$ts.archive.gz"
+                --gzip
+                --oplog
+              )
+
+              # Print a safe, redacted version with exact quoting
+              redacted=( "${cmd[@]}" )
+              for i in "${!redacted[@]}"; do
+                [[ "${redacted[$i]}" == "$MONGO_PASS" ]] && redacted[$i]='******'
+              done
+              printf 'Running: '; printf '%q ' "${redacted[@]}"; echo
+
+              # Execute
+              "${cmd[@]}"
+
+              # Keep 14 days (Values.backup.retentionDays) of backups and delete the rest
+              find /backup -type f -name 'mongo-*.archive.gz' -mtime +{{ .Values.backup.retentionDays}} -delete
+            volumeMounts:
+            - name: backup-storage
+              mountPath: /backup
+          volumes:
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: {{ .Release.Name }}-mongo-backups

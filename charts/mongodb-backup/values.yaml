@@ -1,0 +1,86 @@
+# Default values for mongodb-backup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: mongo
+  # This sets the pull policy for images.
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "8.0.12"
+
+cronjobversion:
+  v0:
+    enabled: false
+  v1:
+    enabled: true  
+
+# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+# This is the name of the CronJob
+name: "mongodb-dump"
+
+# This is for setting up the mongodb authentication more information can be found here: https://hub.docker.com/_/mongo
+auth:
+  rootUsername: "admin"
+  rootPassword: "SecurePassword123"
+
+# This is the MongoDB FQDN host address
+mongoHost: "mongo-service.dok1.svc.cluster.local"  
+
+# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# This is for setting Kubernetes Annotations to a Pod.
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+# This is for setting Kubernetes Labels to a Pod.
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# CronJob schedule and retention days
+backup:
+  schedule: "*/5 * * * *" # Runs backup every five minutes
+  retentionDays: 14       # Retention days for backup files
+
+# NFS server configuration
+nfs:
+  server: 192.168.1.25
+  path: /var/nfs/backup
+
+# Persistent Volume Claim Template configuration
+persistence:
+  size: 1Gi
+  accessMode: ReadWriteMany
+    
