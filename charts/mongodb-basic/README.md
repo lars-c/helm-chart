@@ -2,6 +2,12 @@
 
 ⚠️ StatefulSet for MongoDB
 
+#### Version
+```console
+0.1.6 volumeClaimTemplates added storageClassName/persistence.storageClass
+
+```
+
 #### servicename and service name
 ```console
 SatefulSet:

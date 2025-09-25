@@ -149,4 +149,6 @@ mongo:
 persistence:
   accessModes:
     - ReadWriteOnce
+  # Specify a storage class or set to null to override the default storage class
+  storageClass: "local-path"
   size: 1Gi  
