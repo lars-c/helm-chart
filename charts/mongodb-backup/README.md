@@ -17,11 +17,6 @@ nfs.server: 192.168.1.25
 nfs.path: /var/nfs/backup
 
 ```
-#### Test
-```console
-Version 0.1.3
-
-```
 #### source
 ```console
 /srv/github/node/stateful/mongodb-backup/
