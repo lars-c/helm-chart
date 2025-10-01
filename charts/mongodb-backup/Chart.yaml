@@ -3,7 +3,7 @@ name: mongodb-backup
 description: CronJob backup for MongoDB(R)
 
 type: application
-version: 0.1.2
+version: 0.1.3
 appVersion: "8.0.12"
 
 icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
