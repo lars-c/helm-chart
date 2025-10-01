@@ -1,12 +1,20 @@
 # CronJob - mongodb-backup
 
-⚠️ CronJob for MongoDB backup
+⚠️ CronJob for MongoDB mongodump
 
 #### CronJob
 ```console
-Purpose: Run a cronjob mongodump for a MongoDB StatefulSet
+mongodump cronjob for a MongoDB StatefulSet
+NFS for backup target
 
-NFS backup target
+Source: 
+mongoHost: "mongo-service.dok1.svc.cluster.local"
+auth.rootUsername: "admin"
+auth.rootPassword: "SecurePassword123"
+
+Target NFS config
+nfs.server: 192.168.1.25
+nfs.path: /var/nfs/backup
 
 ```
 #### source
