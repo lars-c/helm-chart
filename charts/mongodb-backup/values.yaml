@@ -74,6 +74,18 @@ backup:
   schedule: "*/5 * * * *" # Runs backup every five minutes
   retentionDays: 14       # Retention days for backup files
 
+# NFS mount options
+mountOptions:
+  nfsvers: 4.1
+  # Max read I/O request sizes (bytes)
+  enable_rsize: true
+  rsize: 1048576
+  # Max write I/O request sizes (bytes)
+  enable_wsize: true
+  wsize: 1048576
+  hard: true # false will enable a soft mount
+  timeo: 600  
+
 # NFS server configuration
 nfs:
   server: 192.168.1.25
