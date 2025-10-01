@@ -781,6 +781,20 @@ entries:
   mongodb-backup:
   - apiVersion: v2
     appVersion: 8.0.12
+    created: "2025-10-01T12:28:59.473275544Z"
+    description: CronJob backup for MongoDB(R)
+    digest: a80c05a112f31c10059796cf513965d0ab17dd775bd4b52d6a4035b3faf49cf0
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mongodb-backup-0.1.4/mongodb-backup-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 8.0.12
     created: "2025-10-01T12:27:56.153311488Z"
     description: CronJob backup for MongoDB(R)
     digest: d8b8932533f1dfefc993d1b24474962745e75cb630018d14a61e2e1dc55fe0c1
@@ -1018,4 +1032,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-01T12:27:56.153439727Z"
+generated: "2025-10-01T12:28:59.473377553Z"
