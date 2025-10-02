@@ -6,6 +6,7 @@
 ```console
 mongodump cronjob for a MongoDB StatefulSet
 NFS for backup target
+Image (custom): ghcr.io/lars-c/mongodb-tools:100.13.0 (Ubuntu 24.04 with MongoDB Database Tools version 100.13.0 installed)
 
 Source: 
 mongoHost: "mongo-service.dok1.svc.cluster.local"

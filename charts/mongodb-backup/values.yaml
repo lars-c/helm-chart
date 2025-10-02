@@ -4,11 +4,11 @@
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: mongo
+  repository: ghcr.io/lars-c/mongodb-tools
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "8.0.12"
+  tag: "100.13.0"
 
 cronjobversion:
   v0:
@@ -31,7 +31,7 @@ auth:
   rootPassword: "SecurePassword123"
 
 # This is the MongoDB FQDN host address
-mongoHost: "mongo-service.dok1.svc.cluster.local"  
+mongoHost: "mongo-service.mongodb.svc.cluster.local"  
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
@@ -71,18 +71,13 @@ backup:
 mountOptions:
   nfsvers: 4.1
   # Max read I/O request sizes (bytes)
-  enable_rsize: true
-  rsize: 1048576
-  # Max write I/O request sizes (bytes)
-  enable_wsize: true
-  wsize: 1048576
   hard: true # false will enable a soft mount
   timeo: 600  
 
 # NFS server configuration
 nfs:
-  server: 192.168.1.25
-  path: /var/nfs/backup
+  server: 192.168.1.116
+  path: /mnt/tank/nfs
 
 # Persistent Volume Claim Template configuration
 persistence:
