@@ -3,7 +3,7 @@ name: joomla-inetpub
 description: Test Helm chart for Joomla
 
 type: application
-version: 0.1.4
+version: 0.1.5
 appVersion: "5.4.0"
 
 dependencies:
