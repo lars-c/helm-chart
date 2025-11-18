@@ -43,8 +43,8 @@ spec:
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.secrets.dbuserPassword }}
-              key: password
+              name: joomla-secret
+              key: dbpassword
         ports:
         - containerPort: 80
           name: joomla

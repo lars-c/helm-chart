@@ -1,0 +1,10 @@
+apiVersion: v2
+name: common
+description: A library Helm chart for Kubernetes
+type: library
+version: 1.0.1
+
+icon: https://img.icons8.com/color/48/public--v1.png
+maintainers:
+- email: oss-maint@inetpub.dk
+  name: oss-maintainer

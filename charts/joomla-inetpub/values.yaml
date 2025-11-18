@@ -5,15 +5,19 @@
 ## Shared values for all charts
 ##
 global:
-  secrets:
-    # Name of Joomla secret
-    dbuserPassword: "mysql-secret"
-  ## Database name (JOOMLA_DB_NAME / MYSQL_DATABASE)
-  dbname: "joomla_db"
-  ##
   ## JOOMLA_DB_USER / MYSQL_USER
   dbuser: "j210"
-  ##
+  #
+  # Database name (JOOMLA_DB_NAME / MYSQL_DATABASE)
+  dbname: "joomla_db"
+  #
+  ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
+  dbpassword: "S3iHysSSAkwRj3SupR33"
+  #
+## Debugging
+debug:
+  enable: true
+  value: "Test"
 ## JOOMLA_DB_HOST
 joomlaDbHost: "joomla-mysql"
 
@@ -26,7 +30,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "php8.3-apache"
+  tag: "5.4.0-php8.3-apache"
 
 # This is to override the chart name.
 nameOverride: ""
@@ -69,6 +73,9 @@ readinessProbe:
   
 ## MySQL specific configuration
 mysql:
+  debug:
+    enable: false
+    value: "TestMySQL"
   ## This sets the container image for MySQL
   ## ref: https://hub.docker.com/_/mysql
   ##
@@ -76,6 +83,8 @@ mysql:
     repository: "mysql"
     tag: "8.0"
     pullPolicy: IfNotPresent
+  auth:
+    rootdbpassword: "bxJK8Q1wd9ZFeDO8bOKbQ9CN"
   ## Tiemzone
   timezone: "Europe/Copenhagen"    
   ##
@@ -90,3 +99,4 @@ mysql:
     requests:
       memory: "512Mi"
       cpu: "250m"
+  

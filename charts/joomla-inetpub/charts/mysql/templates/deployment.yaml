@@ -41,13 +41,13 @@ spec:
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.secrets.dbuserPassword }}
-              key: password
+              name: mysql-secret
+              key: dbpassword
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.secrets.dbuserPassword }}
-              key: root-password
+              name: mysql-secret
+              key: rootdbpassword
         - name: TZ
           value: {{ .Values.timezone }}
         ports:
