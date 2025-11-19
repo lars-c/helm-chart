@@ -44,6 +44,14 @@ service:
   port: 80
   ## loadBalancerIP for the Joomla Service
   loadBalancerIP: ""
+##
+storage:
+  ## Storage class for Joomla PVC
+  class: "local-path"
+  ## Access mode for Joomla PVC
+  accessMode: ReadWriteOnce
+  ## Size of Joomla PVC
+  size: 2Gi
 
 #### Set container requests and limits for resources
 # We usually recommend not to specify default resources and to leave this as a conscious
@@ -60,16 +68,6 @@ resources:
   requests:
     memory: "256Mi"
     cpu: "250m"
-
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
   
 ## MySQL specific configuration
 mysql:
@@ -88,6 +86,13 @@ mysql:
   ## Tiemzone
   timezone: "Europe/Copenhagen"    
   ##
+  storage:
+    ## Storage class for MySQL PVC
+    class: "local-path"
+    ## Access mode for MySQL PVC
+    accessMode: ReadWriteOnce
+    ## Size of MySQL PVC
+    size: 2Gi
   #### Set container requests and limits for resources
   ##
   resources:
