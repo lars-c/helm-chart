@@ -14,13 +14,14 @@ global:
   ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
   dbpassword: "S3iHysSSAkwRj3SupR33"
   #
+  ## JOOMLA_DB_HOST
+  joomlaDbHost: "mysqldb"
+  #
 ## Debugging
 debug:
   enable: true
   value: "Test"
-## JOOMLA_DB_HOST
-joomlaDbHost: "joomla-mysql"
-
+#
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
 
