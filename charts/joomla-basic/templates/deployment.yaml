@@ -9,14 +9,12 @@ spec:
   selector:
     matchLabels:
       app: joomla
-      tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: joomla
-        tier: frontend
     spec:
       initContainers:
       {{- if .Values.cli.enabled }}

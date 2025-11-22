@@ -1,8 +1,8 @@
 apiVersion: v2
 name: joomla-basic
-description: Basic Helm chart for Joomla
-version: 0.4.2
-appVersion: "5.2.3"
+description: Joomla chart with automatic installer
+version: 0.4.3
+appVersion: "6.0.0"
 
 dependencies:
 - name: common

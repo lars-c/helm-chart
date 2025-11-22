@@ -4,19 +4,17 @@ kind: Deployment
 metadata:
   name: joomla-mysql
   labels:
-    app: joomla
+    app: mysql
 spec:
   selector:
     matchLabels:
-      app: joomla
-      tier: mysql
+      app: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: joomla
-        tier: mysql
+        app: mysql
     spec:
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
