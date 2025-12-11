@@ -75,15 +75,27 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# This is to setup the liveness. MongoDB running but jammed is rare. TCP is enough to detect crash loops.
 livenessProbe:
-  httpGet:
-    path: /
-    port: http
+  enabled: true
+  tcpSocket:
+    port: 27017
+  initialDelaySeconds: 15
+  timeoutSeconds: 2
+  failureThreshold: 5
+  periodSeconds: 10
+# This is the readiness probe configuration. Using mongosh to check if the database is responsive.
 readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  enabled: true
+  initialDelaySeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+  periodSeconds: 5
+# This is the startup probe configuration. Using mongosh to check if the database is responsive.
+startupProbe:
+  enabled: true
+  failureThreshold: 40
+  periodSeconds: 5
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
