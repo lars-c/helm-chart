@@ -59,12 +59,16 @@ spec:
           mountPath: /etc/mongo-secrets
           readOnly: true
         resources:
+          {{- if .Values.resources.requests.enable }}
           requests:
             cpu: {{ .Values.resources.requests.cpu | quote}}
             memory: {{ .Values.resources.requests.memory | quote}}
+          {{- end }}
+          {{- if .Values.resources.limits.enable }}
           limits:
             cpu: {{ .Values.resources.limits.cpu | quote}}
             memory: {{ .Values.resources.limits.memory | quote}}
+          {{- end }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           tcpSocket:

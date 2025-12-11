@@ -66,12 +66,14 @@ service:
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 80
 
-# This is settings for pod resources more information can be found here: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+# This is settings for pod resources
 resources:
   limits:
+    enable: false
     cpu: 500m
     memory: 512Mi
   requests:
+    enable: true
     cpu: 100m
     memory: 128Mi
 
