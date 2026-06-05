@@ -1,0 +1,21 @@
+Joomla has been installed.
+
+Service:
+  Name: {{ include "joomla-codex.fullname" . }}
+  Type: {{ .Values.service.type }}
+  Port: {{ .Values.service.port }}
+
+Database:
+  Host: {{ include "joomla-codex.dbHost" . }}
+  Name: {{ default .Values.joomla.dbName .Values.global.dbName }}
+  User: {{ default .Values.joomla.dbUser .Values.global.dbUser }}
+
+To access Joomla when using the default ClusterIP service:
+  kubectl port-forward svc/{{ include "joomla-codex.fullname" . }} 8080:{{ .Values.service.port }}
+
+Then open:
+  http://127.0.0.1:8080
+
+Passwords are stored in Kubernetes Secrets:
+  Joomla DB password Secret: {{ .Values.mysql.fullnameOverride | default (printf "%s-mysql" (include "joomla-codex.fullname" .)) }}-secret
+  MySQL password Secret: {{ .Values.mysql.fullnameOverride | default (printf "%s-mysql" (include "joomla-codex.fullname" .)) }}-secret

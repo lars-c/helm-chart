@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ printf "%s-login-smoke-test" (include "mysql.fullname" .) | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "mysql.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: login-smoke-test
+      image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: MYSQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "mysql.secretName" . }}
+              key: MYSQL_PASSWORD
+      command:
+        - /bin/sh
+        - -ec
+        - mysql --host="{{ include "mysql.serviceName" . }}" --port="{{ .Values.service.port }}" --user="{{ default .Values.mysql.user .Values.global.dbUser }}" --database="{{ default .Values.mysql.database .Values.global.dbName }}" --execute="SELECT 1;"

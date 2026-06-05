@@ -1,0 +1,16 @@
+apiVersion: v2
+name: joomla-codex
+description: A simple homelab Helm chart for Joomla with an included MySQL sub-chart.
+type: application
+version: 0.1.1
+appVersion: "5.4.6"
+
+dependencies:
+  - name: mysql
+    version: 0.1.0
+    repository: "file://charts/mysql"
+
+icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+maintainers:
+- email: oss-maint@inetpub.dk
+  name: oss-maintainer

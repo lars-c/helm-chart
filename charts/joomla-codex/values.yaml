@@ -1,0 +1,159 @@
+# Override the generated chart name. Leave empty to use the chart name.
+nameOverride: ""
+
+# Override the fully qualified release name. Leave empty to use release-name plus chart name.
+fullnameOverride: ""
+
+image:
+  # Joomla container image repository.
+  repository: joomla
+  # Joomla container image tag.
+  tag: "5.4.6-php8.3"
+  # Image pull policy for the Joomla container.
+  pullPolicy: IfNotPresent
+
+service:
+  # Kubernetes Service type for Joomla. Use NodePort or LoadBalancer if your cluster supports it.
+  type: LoadBalancer
+  # External IP or hostname for the Joomla Service. Leave empty to use the cluster-assigned IP.
+  loadBalancerIP: ""
+  # Port exposed by the Joomla Service.
+  port: 80
+  # Container port used by the Joomla Apache image.
+  targetPort: 80
+
+persistence:
+  # Enable persistent storage for Joomla files.
+  enabled: true
+  # StorageClass used by the Joomla PVC. Empty string uses the cluster default.
+  storageClassName: ""
+  # Access modes requested by the Joomla PVC.
+  accessModes:
+    - ReadWriteOnce
+  # Persistent storage size for Joomla files.
+  size: 5Gi
+
+global:
+  # Shared database settings. When set, these values are used by both Joomla
+  # and the included MySQL sub-chart. Individual charts will fall back to
+  # their own values when a global value is not provided.
+  dbName: ""
+  dbUser: ""
+  dbPassword: ""
+
+joomla:
+  # Database user used by Joomla. Prefer `global.dbUser` when set.
+  dbUser: joomla
+  # Database password used by Joomla. Prefer `global.dbPassword` when set.
+  dbPassword: ""
+  # Database name used by Joomla. Prefer `global.dbName` when set.
+  dbName: joomla
+  # Filesystem path mounted for Joomla persistent data.
+  dataMountPath: /var/www/html
+
+resources:
+  # CPU and memory requests for a small homelab Joomla instance.
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  # CPU and memory limits for a small homelab Joomla instance.
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+readinessProbe:
+  # Enable the Joomla readiness probe.
+  enabled: true
+  # HTTP path checked for readiness.
+  path: /
+  # Seconds to wait before the first readiness check.
+  initialDelaySeconds: 20
+  # Seconds between readiness checks.
+  periodSeconds: 10
+  # Seconds before a readiness check times out.
+  timeoutSeconds: 5
+  # Consecutive failures required before marking the pod unready.
+  failureThreshold: 6
+
+livenessProbe:
+  # Enable the Joomla liveness probe.
+  enabled: true
+  # HTTP path checked for liveness.
+  path: /
+  # Seconds to wait before the first liveness check.
+  initialDelaySeconds: 60
+  # Seconds between liveness checks.
+  periodSeconds: 20
+  # Seconds before a liveness check times out.
+  timeoutSeconds: 5
+  # Consecutive failures required before restarting the container.
+  failureThreshold: 6
+
+mysql:
+  # Override the MySQL sub-chart name so the service is consistently named joomla-codex-mysql.
+  fullnameOverride: joomla-codex-mysql
+
+  image:
+    # MySQL container image repository.
+    repository: mysql
+    # MySQL container image tag.
+    tag: "8.4"
+    # Image pull policy for the MySQL container.
+    pullPolicy: IfNotPresent
+
+  service:
+    # Kubernetes Service type for MySQL. ClusterIP is usually best for an internal database.
+    type: ClusterIP
+    # Port exposed by the MySQL Service.
+    port: 3306
+    # Container port used by MySQL.
+    targetPort: 3306
+
+  persistence:
+    # Enable persistent storage for MySQL data.
+    enabled: true
+    # StorageClass used by the MySQL PVC. Empty string uses the cluster default.
+    storageClassName: ""
+    # Access modes requested by the MySQL PVC.
+    accessModes:
+      - ReadWriteOnce
+    # Persistent storage size for MySQL data.
+    size: 2Gi
+  # The MySQL sub-chart provides its own defaults for the initialized database
+  # (database, user, password). Prefer setting `global.*` instead of duplicating
+  # those values here. To override sub-chart defaults, set `mysql.mysql.*` in
+  # a parent values file or use `--set` at install time.
+
+  resources:
+    # CPU and memory requests for a small homelab MySQL instance.
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    # CPU and memory limits for a small homelab MySQL instance.
+    limits:
+      cpu: 500m
+      memory: 768Mi
+
+  readinessProbe:
+    # Enable the MySQL readiness probe.
+    enabled: true
+    # Seconds to wait before the first readiness check.
+    initialDelaySeconds: 20
+    # Seconds between readiness checks.
+    periodSeconds: 10
+    # Seconds before a readiness check times out.
+    timeoutSeconds: 5
+    # Consecutive failures required before marking the pod unready.
+    failureThreshold: 6
+
+  livenessProbe:
+    # Enable the MySQL liveness probe.
+    enabled: true
+    # Seconds to wait before the first liveness check.
+    initialDelaySeconds: 60
+    # Seconds between liveness checks.
+    periodSeconds: 20
+    # Seconds before a liveness check times out.
+    timeoutSeconds: 5
+    # Consecutive failures required before restarting the container.
+    failureThreshold: 6

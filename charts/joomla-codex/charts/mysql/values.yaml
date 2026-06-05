@@ -1,0 +1,78 @@
+# Override the generated chart name. Leave empty to use the chart name.
+nameOverride: ""
+
+# Override the fully qualified release name. The parent chart sets this to joomla-codex-mysql by default.
+fullnameOverride: ""
+
+image:
+  # MySQL container image repository.
+  repository: mysql
+  # MySQL container image tag.
+  tag: "8.4"
+  # Image pull policy for the MySQL container.
+  pullPolicy: IfNotPresent
+
+service:
+  # Kubernetes Service type for MySQL.
+  type: ClusterIP
+  # Port exposed by the MySQL Service.
+  port: 3306
+  # Container port used by MySQL.
+  targetPort: 3306
+
+persistence:
+  # Enable persistent storage for MySQL data.
+  enabled: true
+  # StorageClass used by the MySQL PVC. Empty string uses the cluster default.
+  storageClassName: ""
+  # Access modes requested by the MySQL PVC.
+  accessModes:
+    - ReadWriteOnce
+  # Persistent storage size for MySQL data.
+  size: 8Gi
+
+mysql:
+  # Database created during MySQL initialization.
+  database: joomla
+  # Non-root database user created during MySQL initialization.
+  user: joomla
+  # Password for the non-root database user. Change this before installing in a real cluster.
+  password: changeme-joomla
+  # Root password for MySQL. Change this before installing in a real cluster.
+  rootPassword: changeme-root
+  # Filesystem path mounted for MySQL persistent data.
+  dataMountPath: /var/lib/mysql
+
+resources:
+  # CPU and memory requests for a small homelab MySQL instance.
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  # CPU and memory limits for a small homelab MySQL instance.
+  limits:
+    cpu: 500m
+    memory: 768Mi
+
+readinessProbe:
+  # Enable the MySQL readiness probe.
+  enabled: true
+  # Seconds to wait before the first readiness check.
+  initialDelaySeconds: 20
+  # Seconds between readiness checks.
+  periodSeconds: 10
+  # Seconds before a readiness check times out.
+  timeoutSeconds: 5
+  # Consecutive failures required before marking the pod unready.
+  failureThreshold: 6
+
+livenessProbe:
+  # Enable the MySQL liveness probe.
+  enabled: true
+  # Seconds to wait before the first liveness check.
+  initialDelaySeconds: 60
+  # Seconds between liveness checks.
+  periodSeconds: 20
+  # Seconds before a liveness check times out.
+  timeoutSeconds: 5
+  # Consecutive failures required before restarting the container.
+  failureThreshold: 6
