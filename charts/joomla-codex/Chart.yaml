@@ -2,7 +2,7 @@ apiVersion: v2
 name: joomla-codex
 description: A simple homelab Helm chart for Joomla with an included MySQL sub-chart.
 type: application
-version: 0.1.1
+version: 0.1.2
 appVersion: "5.4.6"
 
 dependencies:
