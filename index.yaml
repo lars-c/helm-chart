@@ -743,6 +743,25 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/joomla-basic-0.1.1/joomla-basic-0.1.1.tgz
     version: 0.1.1
+  joomla-codex:
+  - apiVersion: v2
+    appVersion: 5.4.6
+    created: "2026-06-05T11:58:42.461219254Z"
+    dependencies:
+    - name: mysql
+      repository: file://charts/mysql
+      version: 0.1.0
+    description: A simple homelab Helm chart for Joomla with an included MySQL sub-chart.
+    digest: 3bb8e1c0eca714b86cd2a1512e688f4ff2f4543457a5871e75c5a625fe8fdf6d
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: joomla-codex
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-codex-0.1.1/joomla-codex-0.1.1.tgz
+    version: 0.1.1
   joomla-inetpub:
   - apiVersion: v2
     appVersion: 5.4.0
@@ -1245,4 +1264,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-11T14:18:48.334633035Z"
+generated: "2026-06-05T11:58:42.461354486Z"
