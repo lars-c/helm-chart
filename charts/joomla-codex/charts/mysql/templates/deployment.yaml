@@ -74,3 +74,12 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "mysql.pvcName" . }}
       {{- end }}
+      {{- if .Values.tolerationsEnabled }}
+      tolerations:
+      {{- range .Values.tolerations }}
+      - key: {{ .key }}
+        operator: {{ .operator }}
+        value: {{ .value }}
+        effect: {{ .effect }}
+      {{- end }}
+      {{- end }}

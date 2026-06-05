@@ -61,6 +61,18 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+# Tolerations for pod assignment
+tolerationsEnabled: true
+tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "gray"
+    effect: "NoSchedule"
+  - key: "key1"
+    operator: "Equal"
+    value: "orange"
+    effect: "NoSchedule"    
+
 readinessProbe:
   # Enable the Joomla readiness probe.
   enabled: true

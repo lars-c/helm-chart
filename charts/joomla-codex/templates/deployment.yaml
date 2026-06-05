@@ -67,3 +67,12 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "joomla-codex.pvcName" . }}
       {{- end }}
+      {{- if .Values.tolerationsEnabled }}
+      tolerations:
+      {{- range .Values.tolerations }}
+      - key: {{ .key }}
+        operator: {{ .operator }}
+        value: {{ .value }}
+        effect: {{ .effect }}
+      {{- end }}
+      {{- end }}
