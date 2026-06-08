@@ -746,6 +746,24 @@ entries:
   joomla-codex:
   - apiVersion: v2
     appVersion: 5.4.6
+    created: "2026-06-08T08:29:14.237699223Z"
+    dependencies:
+    - name: mysql
+      repository: file://charts/mysql
+      version: 0.1.0
+    description: A simple homelab Helm chart for Joomla with an included MySQL sub-chart.
+    digest: 8c2e7afcc76766106d785b3869084296e592e6a4dd4a49cb84a3574f91c3edf7
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: joomla-codex
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-codex-0.1.4/joomla-codex-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 5.4.6
     created: "2026-06-05T13:54:50.867997747Z"
     dependencies:
     - name: mysql
@@ -1300,4 +1318,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-05T13:54:50.868164819Z"
+generated: "2026-06-08T08:29:14.237817701Z"
