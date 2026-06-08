@@ -54,6 +54,11 @@ resources:
     memory: 768Mi
 
 # Tolerations for pod assignment
+# Notes:
+# - Set `tolerationsEnabled: true` and provide at least one item in `tolerations`.
+# - Each item requires `key`, `operator`, and `effect`.
+# - If `operator` is `Equal` then `value` is required; if `operator` is `Exists` omit `value`.
+# - Example entries below show two tolerations that match different taint values.
 tolerationsEnabled: true
 tolerations:
   - key: "key1"
@@ -63,7 +68,7 @@ tolerations:
   - key: "key1"
     operator: "Equal"
     value: "orange"
-    effect: "NoSchedule"    
+    effect: "NoSchedule"
 
 readinessProbe:
   # Enable the MySQL readiness probe.

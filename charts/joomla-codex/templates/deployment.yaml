@@ -67,12 +67,27 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "joomla-codex.pvcName" . }}
       {{- end }}
-      {{- if .Values.tolerationsEnabled }}
+      {{- /* Render tolerations only when enabled and non-empty. Per-item validation:
+           - require key, operator, effect
+           - if operator == "Equal" then value is required
+           - if operator == "Exists" omit value
+         */ -}}
+      {{- if and .Values.tolerationsEnabled (gt (len .Values.tolerations) 0) }}
       tolerations:
       {{- range .Values.tolerations }}
-      - key: {{ .key }}
-        operator: {{ .operator }}
-        value: {{ .value }}
-        effect: {{ .effect }}
+      {{- if and .key .operator .effect }}
+        {{- if eq .operator "Equal" }}
+          {{- if .value }}
+      - key: "{{ .key }}"
+        operator: "{{ .operator }}"
+        value: "{{ .value }}"
+        effect: "{{ .effect }}"
+          {{- end }}
+        {{- else }}
+      - key: "{{ .key }}"
+        operator: "{{ .operator }}"
+        effect: "{{ .effect }}"
+        {{- end }}
+      {{- end }}
       {{- end }}
       {{- end }}
