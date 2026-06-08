@@ -93,3 +93,11 @@ livenessProbe:
   timeoutSeconds: 5
   # Consecutive failures required before restarting the container.
   failureThreshold: 6
+
+affinity:
+  # Enable affinity constraints for pod scheduling.
+  enabled: false
+  # Node affinity rules. Define nodeAffinity structure to support both
+  # requiredDuringSchedulingIgnoredDuringExecution and
+  # preferredDuringSchedulingIgnoredDuringExecution.
+  nodeAffinity: {}

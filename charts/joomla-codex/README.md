@@ -107,6 +107,101 @@ helm install joomla ./joomla-codex \
   --set mysql.persistence.storageClassName='local-path'
 ```
 
+## Affinity
+
+Pod affinity constraints are **disabled by default**. To enable node affinity for either Joomla or MySQL:
+
+1. Set `affinity.enabled: true`
+2. Define `affinity.nodeAffinity` with `requiredDuringSchedulingIgnoredDuringExecution` and/or `preferredDuringSchedulingIgnoredDuringExecution`
+
+### Required Node Affinity (Hard Constraint)
+
+To schedule pods **only** on nodes with a specific label:
+
+```yaml
+affinity:
+  enabled: true
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: color
+            operator: In
+            values:
+            - green
+```
+
+Or using Helm CLI:
+
+```sh
+helm install joomla ./joomla-codex \
+  --set affinity.enabled=true \
+  --set 'affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=color' \
+  --set 'affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=In' \
+  --set 'affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=green'
+```
+
+### Preferred Node Affinity (Soft Constraint)
+
+To schedule pods on nodes with a label **if possible** (weight-based preference):
+
+```yaml
+affinity:
+  enabled: true
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: color
+            operator: In
+            values:
+            - green
+```
+
+### Combined Hard and Soft Affinity
+
+Use both constraints together:
+
+```yaml
+affinity:
+  enabled: true
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: disktype
+            operator: In
+            values:
+            - ssd
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 50
+        preference:
+          matchExpressions:
+          - key: zone
+            operator: In
+            values:
+            - us-west-1a
+```
+
+### MySQL Affinity
+
+To apply affinity to MySQL, configure `mysql.affinity`:
+
+```yaml
+mysql:
+  affinity:
+    enabled: true
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: tier
+              operator: In
+              values:
+              - database
+```
+
 ## Passwords
 
 Passwords are configured through `values.yaml` and rendered into Kubernetes Secrets. The templates do not hardcode passwords.

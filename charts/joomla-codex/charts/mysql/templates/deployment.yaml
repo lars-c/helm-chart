@@ -98,3 +98,8 @@ spec:
       {{- end }}
       {{- end }}
       {{- end }}
+      {{- if and .Values.affinity.enabled .Values.affinity.nodeAffinity }}
+      affinity:
+        nodeAffinity:
+          {{- toYaml .Values.affinity.nodeAffinity | nindent 10 }}
+      {{- end }}

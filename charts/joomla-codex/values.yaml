@@ -106,6 +106,32 @@ livenessProbe:
   # Consecutive failures required before restarting the container.
   failureThreshold: 6
 
+affinity:
+  # Enable affinity constraints for pod scheduling.
+  enabled: false
+  # Node affinity rules. Define nodeAffinity structure to support both
+  # requiredDuringSchedulingIgnoredDuringExecution and
+  # preferredDuringSchedulingIgnoredDuringExecution.
+  nodeAffinity: {}
+    # Example required affinity:
+    # requiredDuringSchedulingIgnoredDuringExecution:
+    #   nodeSelectorTerms:
+    #     - matchExpressions:
+    #       - key: color
+    #         operator: In
+    #         values:
+    #         - green
+    #
+    # Example preferred affinity:
+    # preferredDuringSchedulingIgnoredDuringExecution:
+    #   - weight: 100
+    #     preference:
+    #       matchExpressions:
+    #       - key: color
+    #         operator: In
+    #         values:
+    #         - green
+
 mysql:
   # Override the MySQL sub-chart name so the service is consistently named joomla-codex-mysql.
   fullnameOverride: joomla-codex-mysql
