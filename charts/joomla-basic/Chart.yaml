@@ -1,7 +1,7 @@
 apiVersion: v2
 name: joomla-basic
 description: Joomla chart with automatic installer
-version: 0.4.3
+version: 0.4.4
 appVersion: "6.0.0"
 
 dependencies:
