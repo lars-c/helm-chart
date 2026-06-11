@@ -65,22 +65,14 @@ Create the name of the service account to use
 Return base64 JOOMLA_DB_PASSWOR / MYSQL_PASSWORD value
 */}}
 {{- define "common.dbpassword.secret" -}}
-{{- if .Values.global.dbpassword }}
-    {{- printf .Values.global.dbpassword | b64enc -}}
-{{- else -}}
-    {{- printf (randAlphaNum 16) | quote -}}
-{{- end -}}
+{{- required "global.dbpassword is required" .Values.global.dbpassword | b64enc -}}
 {{- end -}}
 
 {{/*
 Return MYSQL_ROOT_PASSWORD value
 */}}
-{{- define "common.rootpassword" -}}
-{{- if .Values.auth.rootdbpassword }}
-    {{- printf .Values.auth.rootdbpassword | b64enc -}}
-{{- else -}}
-    {{- printf (randAlphaNum 16) | quote -}}
-{{- end -}}
+{{- define "common.rootpassword.secret" -}}
+{{- required "mysql.auth.rootdbpassword is required" .Values.auth.rootdbpassword | b64enc -}}
 {{- end -}}
 
 {{/*
