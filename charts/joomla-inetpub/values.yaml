@@ -12,7 +12,7 @@ global:
   dbname: "joomla_db"
   #
   ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
-  dbpassword: "S3iHysSSAkwRj3SupR33"
+  dbpassword: "drfqe4fszdrfae4faerf"
   #
   ## JOOMLA_DB_HOST
   joomlaDbHost: "mysqldb"
@@ -76,7 +76,6 @@ mysql:
     enable: false
     value: "TestMySQL"
   ## This sets the container image for MySQL
-  ## ref: https://hub.docker.com/_/mysql
   ##
   image:
     repository: "mysql"
