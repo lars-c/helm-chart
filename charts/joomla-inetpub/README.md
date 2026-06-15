@@ -22,3 +22,23 @@ helm install joomla-inetpub . \
 ```
 
 The values in Kubernetes Secret `data` are base64-encoded as required by Kubernetes. Base64 is not encryption, so avoid committing real production passwords in `values.yaml`.
+
+## Testing
+
+This chart includes two Helm test Pods:
+
+- `joomla-http-smoke-test` verifies that the Joomla Service answers HTTP on the configured service port. It does not verify external LoadBalancer access, Joomla setup completion, or the web installer state.
+- `mysql-login-smoke-test` verifies that the MySQL Service accepts the configured database user, password, and database name, then runs `SELECT 1`. It does not verify migrations, backups, replication, or persistent storage recovery.
+
+Run the tests after the release is installed and the Pods are ready:
+
+```sh
+helm test joomla-inetpub
+```
+
+Inspect logs if a test fails:
+
+```sh
+kubectl logs joomla-http-smoke-test
+kubectl logs mysql-login-smoke-test
+```

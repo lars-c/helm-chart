@@ -12,7 +12,7 @@ global:
   dbname: "joomla_db"
   #
   ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
-  dbpassword: "drfqe4fszdrfae4faerf"
+  dbpassword: "change-me"
   #
   ## JOOMLA_DB_HOST
   joomlaDbHost: "mysqldb"
@@ -82,7 +82,7 @@ mysql:
     tag: "8.0"
     pullPolicy: IfNotPresent
   auth:
-    rootdbpassword: "bxJK8Q1wd9ZFeDO8bOKbQ9CN"
+    rootdbpassword: "change-me-root"
   ## Tiemzone
   timezone: "Europe/Copenhagen"    
   ##
