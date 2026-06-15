@@ -1,29 +1,18 @@
-# Default values for joomla-inetpub.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 ## Shared values for all charts
-##
 global:
   ## JOOMLA_DB_USER / MYSQL_USER
   dbuser: "j210"
-  #
   # Database name (JOOMLA_DB_NAME / MYSQL_DATABASE)
   dbname: "joomla_db"
-  #
   ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
   dbpassword: "change-me"
-  #
   ## JOOMLA_DB_HOST
   joomlaDbHost: "mysqldb"
-  #
+
 ## Debugging
 debug:
   enable: true
   value: "Test"
-#
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
@@ -37,29 +26,27 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  # Servicetype for the Joomla Service. More information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: LoadBalancer
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 80
-  ## loadBalancerIP for the Joomla Service
+  # loadBalancerIP for the Joomla Service
   loadBalancerIP: ""
-##
+
 storage:
-  ## Storage class for Joomla PVC
+  # Storage class for Joomla PVC
   class: "local-path"
-  ## Access mode for Joomla PVC
+  # Access mode for Joomla PVC
   accessMode: ReadWriteOnce
-  ## Size of Joomla PVC
+  # Size of Joomla PVC
   size: 2Gi
 
-#### Set container requests and limits for resources
+# Set container requests and limits for resources
 # We usually recommend not to specify default resources and to leave this as a conscious
 # choice for the user. This also increases chances charts run on environments with little
 # resources, such as Minikube. If you do want to specify resources, uncomment the following
 # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-##
 resources:
   enableLimit: false
   limits:
@@ -69,32 +56,58 @@ resources:
   requests:
     memory: "256Mi"
     cpu: "250m"
+# Tolerations for Joomla pods.
+tolerationsEnabled: true
+tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "gray"
+    effect: "NoSchedule"
+  - key: "key1"
+    operator: "Equal"
+    value: "orange"
+    effect: "NoSchedule"
   
-## MySQL specific configuration
+# MySQL specific configuration
 mysql:
   debug:
     enable: false
     value: "TestMySQL"
-  ## This sets the container image for MySQL
-  ##
+  
+  # This sets the container image for MySQL
   image:
     repository: "mysql"
     tag: "8.0"
     pullPolicy: IfNotPresent
+
   auth:
     rootdbpassword: "change-me-root"
-  ## Tiemzone
-  timezone: "Europe/Copenhagen"    
-  ##
+
+  # Tiemzone
+  timezone: "Europe/Copenhagen"
+
+  # Tolerations for MySQL pods.    
+  tolerationsEnabled: false
+  tolerations:
+    - key: "key1"
+      operator: "Equal"
+      value: "gray"
+      effect: "NoSchedule"
+    - key: "key1"
+      operator: "Equal"
+      value: "orange"
+      effect: "NoSchedule"
+  
+  # Storage configuration for MySQL
   storage:
-    ## Storage class for MySQL PVC
+    # Storage class for MySQL PVC
     class: "local-path"
-    ## Access mode for MySQL PVC
+    # Access mode for MySQL PVC
     accessMode: ReadWriteOnce
-    ## Size of MySQL PVC
+    # Size of MySQL PVC
     size: 2Gi
-  #### Set container requests and limits for resources
-  ##
+
+  # MySQL requests and limits
   resources:
     enableLimit: false
     limits:
@@ -104,4 +117,3 @@ mysql:
     requests:
       memory: "512Mi"
       cpu: "250m"
-  

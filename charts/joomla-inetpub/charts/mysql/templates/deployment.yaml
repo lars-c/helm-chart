@@ -10,11 +10,21 @@ spec:
       app: mysql
   strategy:
     type: Recreate
+spec:
+  selector:
+    matchLabels:
+      app: joomla
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: joomla
     spec:
+      {{- if and .Values.tolerationsEnabled .Values.tolerations }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         name: mysql
