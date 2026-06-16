@@ -25,6 +25,10 @@ spec:
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
+      {{- with .Values.affinity.spec }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         name: mysql

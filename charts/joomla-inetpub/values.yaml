@@ -59,6 +59,10 @@ tolerations:
     value: "orange"
     effect: "NoSchedule"
 
+## Joomla pod affinity.
+affinity:
+  spec: {}
+
 ## MySQL sub-chart values managed by the parent chart.
 mysql:
   ## Debug values.
@@ -107,3 +111,7 @@ mysql:
       operator: "Equal"
       value: "orange"
       effect: "NoSchedule"
+
+  ## MySQL pod affinity.
+  affinity:
+    spec: {}

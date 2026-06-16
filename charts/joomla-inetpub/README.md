@@ -2,6 +2,16 @@
 
 Helm chart for deploying Joomla with a bundled MySQL subchart.
 
+## Updating joomla version (image:tag)
+
+Upgrading the chart image from Joomla 5.x to 6.x does not replace an existing Joomla installation stored on a PVC. Existing sites should be upgraded through Joomla’s own update process before switching the chart image to a Joomla 6 image.
+
+1. Backup PVC + database 
+2. Upgrade Joomla from inside Joomla
+3. Verify site/admin/extensions/templates
+4. Upgrade Helm chart image tag
+5. Verify again
+
 ## Secrets and Passwords
 
 This chart creates two Kubernetes `Opaque` Secrets:
@@ -50,6 +60,43 @@ global:
   dbUser: j210
   dbName: joomla_db
 ```
+
+## Affinity
+
+Affinity is disabled by default. Set `affinity.spec` for Joomla pods and `mysql.affinity.spec` for MySQL pods using the standard Kubernetes affinity structure.
+
+Required node affinity pins a pod to matching nodes:
+
+```yaml
+affinity:
+  spec:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: color
+                operator: In
+                values:
+                  - green
+```
+
+Preferred node affinity asks Kubernetes to prefer matching nodes:
+
+```yaml
+affinity:
+  spec:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: color
+                operator: In
+                values:
+                  - green
+```
+
+Use the same structure under `mysql.affinity.spec` for MySQL. Hard affinity can leave pods pending if no node matches the labels.
 
 ## Testing
 
