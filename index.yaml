@@ -853,6 +853,27 @@ entries:
   joomla-inetpub:
   - apiVersion: v2
     appVersion: 5.4.0
+    created: "2026-06-16T07:34:52.528373183Z"
+    dependencies:
+    - name: common
+      repository: file://./charts/common
+      version: 1.0.1
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 0.1.0
+    description: Test Helm chart for Joomla
+    digest: 0ea67e66d6fa8261cfe12a71935df4fb104bc7478a913b7d008dc0bdc43e61c3
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: joomla-inetpub
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-inetpub-0.3.0/joomla-inetpub-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 5.4.0
     created: "2026-06-16T06:40:55.671760996Z"
     dependencies:
     - name: common
@@ -1457,4 +1478,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-16T06:40:55.671979043Z"
+generated: "2026-06-16T07:34:52.528574685Z"
