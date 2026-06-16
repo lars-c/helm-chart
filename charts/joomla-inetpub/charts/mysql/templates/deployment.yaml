@@ -41,9 +41,9 @@ spec:
           {{- end }}              
         env:
         - name: MYSQL_DATABASE
-          value: {{ .Values.global.dbname }}
+          value: {{ .Values.global.dbName }}
         - name: MYSQL_USER
-          value: {{ .Values.global.dbuser }}
+          value: {{ .Values.global.dbUser }}
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:

@@ -37,9 +37,9 @@ spec:
         - name: JOOMLA_DB_HOST
           value: {{ .Values.global.joomlaDbHost | quote }}
         - name: JOOMLA_DB_NAME
-          value: {{ .Values.global.dbname | quote}}
+          value: {{ .Values.global.dbName | quote}}
         - name: JOOMLA_DB_USER
-          value: {{ .Values.global.dbuser | quote}}
+          value: {{ .Values.global.dbUser | quote}}
         - name: JOOMLA_DB_PASSWORD
           valueFrom:
             secretKeyRef:

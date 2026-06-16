@@ -16,9 +16,9 @@ spec:
     - name: MYSQL_HOST
       value: {{ .Values.global.joomlaDbHost | quote }}
     - name: MYSQL_DATABASE
-      value: {{ .Values.global.dbname | quote }}
+      value: {{ .Values.global.dbName | quote }}
     - name: MYSQL_USER
-      value: {{ .Values.global.dbuser | quote }}
+      value: {{ .Values.global.dbUser | quote }}
     - name: MYSQL_PASSWORD
       valueFrom:
         secretKeyRef:

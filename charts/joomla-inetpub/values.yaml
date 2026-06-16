@@ -1,11 +1,11 @@
 ## Shared database values used by Joomla and MySQL.
 global:
   # JOOMLA_DB_USER / MYSQL_USER
-  dbuser: "j210"
+  dbUser: "j210"
   # JOOMLA_DB_NAME / MYSQL_DATABASE
-  dbname: "joomla_db"
+  dbName: "joomla_db"
   # JOOMLA_DB_PASSWORD / MYSQL_PASSWORD
-  dbpassword: "change-me"
+  dbPassword: "change-me"
   # JOOMLA_DB_HOST
   joomlaDbHost: "mysqldb"
 
@@ -97,7 +97,7 @@ mysql:
       memory: "512Mi"
 
   ## MySQL pod tolerations.
-  tolerationsEnabled: false
+  tolerationsEnabled: true
   tolerations:
     - key: "key1"
       operator: "Equal"
