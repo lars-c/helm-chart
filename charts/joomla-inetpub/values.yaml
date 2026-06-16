@@ -1,62 +1,53 @@
-## Shared values for all charts
+## Shared database values used by Joomla and MySQL.
 global:
-  ## JOOMLA_DB_USER / MYSQL_USER
+  # JOOMLA_DB_USER / MYSQL_USER
   dbuser: "j210"
-  # Database name (JOOMLA_DB_NAME / MYSQL_DATABASE)
+  # JOOMLA_DB_NAME / MYSQL_DATABASE
   dbname: "joomla_db"
-  ## OOMLA_DB_PASSWORD / MYSQL_PASSWORD
+  # JOOMLA_DB_PASSWORD / MYSQL_PASSWORD
   dbpassword: "change-me"
-  ## JOOMLA_DB_HOST
+  # JOOMLA_DB_HOST
   joomlaDbHost: "mysqldb"
 
-## Debugging
+## Optional chart name overrides.
+nameOverride: ""
+fullnameOverride: ""
+
+## Debug values.
 debug:
   enable: true
   value: "Test"
 
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+## Joomla image configuration.
 image:
   repository: joomla
-  # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "5.4.0-php8.3-apache"
+  pullPolicy: IfNotPresent
 
-# This is to override the chart name.
-nameOverride: ""
-fullnameOverride: ""
-
+## Joomla Service configuration.
 service:
-  # Servicetype for the Joomla Service. More information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: LoadBalancer
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 80
-  # loadBalancerIP for the Joomla Service
   loadBalancerIP: ""
 
+## Joomla persistent storage configuration.
 storage:
-  # Storage class for Joomla PVC
   class: "local-path"
-  # Access mode for Joomla PVC
   accessMode: ReadWriteOnce
-  # Size of Joomla PVC
   size: 2Gi
 
-# Set container requests and limits for resources
-# We usually recommend not to specify default resources and to leave this as a conscious
-# choice for the user. This also increases chances charts run on environments with little
-# resources, such as Minikube. If you do want to specify resources, uncomment the following
-# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## Joomla resource requests and limits.
 resources:
   enableLimit: false
   limits:
-    memory: "768Mi"
     cpu: "500m"
+    memory: "768Mi"
   enableRequest: true
   requests:
-    memory: "256Mi"
     cpu: "250m"
-# Tolerations for Joomla pods.
+    memory: "256Mi"
+
+## Joomla pod tolerations.
 tolerationsEnabled: true
 tolerations:
   - key: "key1"
@@ -67,26 +58,45 @@ tolerations:
     operator: "Equal"
     value: "orange"
     effect: "NoSchedule"
-  
-# MySQL specific configuration
+
+## MySQL sub-chart values managed by the parent chart.
 mysql:
+  ## Debug values.
   debug:
     enable: false
     value: "TestMySQL"
-  
-  # This sets the container image for MySQL
+
+  ## MySQL image configuration.
   image:
     repository: "mysql"
     tag: "8.0"
     pullPolicy: IfNotPresent
 
+  ## MySQL authentication configuration.
   auth:
     rootdbpassword: "change-me-root"
 
-  # Tiemzone
+  ## MySQL timezone.
   timezone: "Europe/Copenhagen"
 
-  # Tolerations for MySQL pods.    
+  ## MySQL persistent storage configuration.
+  storage:
+    class: "local-path"
+    accessMode: ReadWriteOnce
+    size: 2Gi
+
+  ## MySQL resource requests and limits.
+  resources:
+    enableLimit: false
+    limits:
+      cpu: "500m"
+      memory: "768Mi"
+    enableRequest: true
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+
+  ## MySQL pod tolerations.
   tolerationsEnabled: false
   tolerations:
     - key: "key1"
@@ -97,23 +107,3 @@ mysql:
       operator: "Equal"
       value: "orange"
       effect: "NoSchedule"
-  
-  # Storage configuration for MySQL
-  storage:
-    # Storage class for MySQL PVC
-    class: "local-path"
-    # Access mode for MySQL PVC
-    accessMode: ReadWriteOnce
-    # Size of MySQL PVC
-    size: 2Gi
-
-  # MySQL requests and limits
-  resources:
-    enableLimit: false
-    limits:
-      memory: "768Mi"
-      cpu: "500m"
-    enableRequest: true
-    requests:
-      memory: "512Mi"
-      cpu: "250m"
