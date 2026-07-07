@@ -7,11 +7,11 @@ spec:
   replicas: {{ .Values.replicaCount }} # Specifies the number of replicas
   selector:
     matchLabels:
-      app: mongodb
+{{- include "mongodb.selectorLabels" . | nindent 6 }}      
   template:
     metadata:
       labels:
-        app: mongodb
+{{- include "mongodb.selectorLabels" . | nindent 8 }}
     spec:
       initContainers:
         - name: fix-keyfile-perms
@@ -30,7 +30,7 @@ spec:
               mountPath: /dst    
       containers:
       - name: mongodb
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - "--replSet"

@@ -60,3 +60,18 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Selector labels for MongoDB pods.
+
+Used by:
+1. StatefulSet spec.selector.matchLabels
+2. StatefulSet spec.template.metadata.labels
+3. NetworkPolicy spec.podSelector.matchLabels
+4. NetworkPolicy ingress.from.podSelector.matchLabels for MongoDB internal traffic
+
+Keep these labels stable. Changing StatefulSet selector labels on an existing release can require recreating the StatefulSet.
+*/}}
+{{- define "mongodb.selectorLabels" -}}
+app: mongodb
+{{- end }}

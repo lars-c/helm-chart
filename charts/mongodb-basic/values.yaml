@@ -12,7 +12,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "8.0.12"
+  tag: ""
 
 # This is for the secrets for pulling an image from a private repository.
 imagePullSecrets: []
@@ -151,6 +151,14 @@ tolerations:
     operator: "Equal"
     value: "orange"
     effect: "NoSchedule"
+
+## NetworkPolicy for pod assignment    
+##
+networkPolicy:
+  enabled: true
+  allowedNamespace: graylog
+  allowedPodLabels:
+    graylog-mongodb-client: "true"
 
 # MongoDB specific values
 mongo:

@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongodb-allow-graylog
+spec:
+  podSelector:
+    matchLabels:
+{{- include "mongodb.selectorLabels" . | nindent 6 }}
+
+  policyTypes:
+    - Ingress
+
+  ingress:
+    # MongoDB internal traffic
+    - from:
+        - podSelector:
+            matchLabels:
+{{- include "mongodb.selectorLabels" . | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: 27017
+
+    # Graylog -> MongoDB
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.allowedNamespace | quote }}
+          podSelector:
+            matchLabels:
+{{- toYaml .Values.networkPolicy.allowedPodLabels | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: 27017
