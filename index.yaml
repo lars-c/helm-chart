@@ -1277,6 +1277,20 @@ entries:
   mongodb-basic:
   - apiVersion: v2
     appVersion: 8.0.12
+    created: "2026-07-08T07:52:30.136880725Z"
+    description: MongoDB(R) StatefulSet for Kubernetes
+    digest: 416664cb3ca7796797e07f279dc0363df33e0e44f0d411e4da5eebe220ce5325
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mongodb-basic
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mongodb-basic-0.2.1/mongodb-basic-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 8.0.12
     created: "2026-07-07T14:07:14.103929712Z"
     description: MongoDB(R) StatefulSet for Kubernetes
     digest: bcd31d9dad4ae9128ad70b9efe94c810595dbbe53923fa02a5a95ad4bd5faa54
@@ -1513,4 +1527,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-07T14:07:14.104147268Z"
+generated: "2026-07-08T07:52:30.137054063Z"
