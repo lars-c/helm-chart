@@ -1,8 +1,9 @@
-# Default values for mongo-backup.
+# Default values for mongodb-basic.
 # This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+#
 # Name of the StatefulSet
 name: "mongodb"
+
 # This will set the replicaset count
 replicaCount: 3
 
@@ -52,6 +53,7 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
 # StatefulSet service name
 # Must match the service name in the Service definition
 serviceName: "mongo-service"
@@ -170,4 +172,4 @@ persistence:
     - ReadWriteOnce
   # Specify a storage class or set to null to override the default storage class
   storageClass: "local-path"
-  size: 1Gi  
+  size: 1Gi

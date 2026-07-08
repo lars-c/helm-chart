@@ -5,6 +5,6 @@ metadata:
 spec:
   clusterIP: None
   selector:
-    app: mongodb
+{{- include "mongodb.selectorLabels" . | nindent 4 }}
   ports:
     - port: 27017

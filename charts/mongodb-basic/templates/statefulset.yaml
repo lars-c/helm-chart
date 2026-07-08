@@ -10,8 +10,15 @@ spec:
 {{- include "mongodb.selectorLabels" . | nindent 6 }}      
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+{{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
 {{- include "mongodb.selectorLabels" . | nindent 8 }}
+{{- range $key, $value := omit .Values.podLabels "app" }}
+        {{ $key }}: {{ $value | quote }}
+{{- end }}
     spec:
       initContainers:
         - name: fix-keyfile-perms
