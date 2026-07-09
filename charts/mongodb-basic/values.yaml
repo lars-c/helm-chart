@@ -60,10 +60,8 @@ serviceName: "mongo-service"
 
 # This is for setting up a service
 service:
-  # This sets the service type more
-  type: None
   # This sets the ports
-  port: 80
+  port: 27017
 
 # This is settings for pod resources
 resources:
@@ -161,10 +159,6 @@ networkPolicy:
   allowedNamespace: graylog
   allowedPodLabels:
     graylog-mongodb-client: "true"
-
-# MongoDB specific values
-mongo:
-  port: 27017
 
 # Persistent Volume Claim Template configuration
 persistence:

@@ -11,5 +11,5 @@ spec:
     - name: nc
       image: busybox
       command: ['sh', '-c']
-      args: ['nc -vz {{ .Values.serviceName }} {{ .Values.mongo.port }}']
+      args: ['nc -vz {{ .Values.serviceName }} {{ .Values.service.port }}']
   restartPolicy: Never

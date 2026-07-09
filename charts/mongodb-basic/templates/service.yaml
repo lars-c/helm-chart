@@ -7,4 +7,4 @@ spec:
   selector:
 {{- include "mongodb.selectorLabels" . | nindent 4 }}
   ports:
-    - port: 27017
+    - port: {{ .Values.service.port }}

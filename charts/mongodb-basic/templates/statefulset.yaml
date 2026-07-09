@@ -57,7 +57,7 @@ spec:
                 name: {{ .Release.Name }}-mongodb-secret
                 key: rootPassword  
         ports:
-        - containerPort: {{ .Values.mongo.port }}
+        - containerPort: {{ .Values.service.port }}
           name: mongo
         volumeMounts:
         - name: {{ .Release.Name }}-mongodb-storage
