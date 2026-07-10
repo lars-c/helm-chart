@@ -19,7 +19,7 @@ spec:
 {{- include "mongodb.selectorLabels" . | nindent 14 }}
       ports:
         - protocol: TCP
-          port: 27017
+          port: {{ .Values.service.port }}
 
     # Graylog -> MongoDB
     - from:
@@ -33,5 +33,5 @@ spec:
 {{- end }}
       ports:
         - protocol: TCP
-          port: 27017
+          port: {{ .Values.service.port }}
 {{- end }}
