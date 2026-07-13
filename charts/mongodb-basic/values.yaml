@@ -105,8 +105,7 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
-## preferred (soft) and required (hard) affinity
-##
+# preferred (soft) and required (hard) affinity
 affinity:
   enabled: false
   preferred: true
@@ -139,8 +138,7 @@ affinity:
       values:
         - green  
 
-## Tolerations for pod assignment
-##
+# Tolerations for pod assignment
 tolerationsEnabled: false
 tolerations:
   - key: "key1"
@@ -152,8 +150,7 @@ tolerations:
     value: "orange"
     effect: "NoSchedule"
 
-## NetworkPolicy for pod assignment    
-##
+# NetworkPolicy for pod assignment
 networkPolicy:
   enabled: true
   allowedNamespace: graylog
