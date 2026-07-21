@@ -20,6 +20,11 @@ spec:
         {{ $key }}: {{ $value | quote }}
 {{- end }}
     spec:
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+        fsGroupChangePolicy: {{ .Values.podSecurityContext.fsGroupChangePolicy }}
+      {{- end }}
       initContainers:
         - name: fix-keyfile-perms
           image: busybox:1.36
@@ -39,6 +44,12 @@ spec:
       - name: mongodb
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if .Values.containerSecurityContext.enabled }}
+        securityContext:
+          runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.containerSecurityContext.runAsGroup }}
+          allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}
+        {{- end }}
         args:
         - "--replSet"
         - rs0
@@ -101,10 +112,7 @@ spec:
           failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds }}
         {{- end }}
-        securityContext:
-          runAsUser: 999
-          runAsGroup: 999
-          allowPrivilegeEscalation: false
+
       volumes:
         - name: keyfile-src
           secret:

@@ -138,6 +138,142 @@ graylog:
 Check your Graylog chart's values schema. Some charts place this at top-level
 `customLabels`, while others nest it under the Graylog workload.
 
+## Security context
+
+This chart runs MongoDB as a non-root user.
+
+The default security context is:
+
+```yaml
+podSecurityContext:
+  enabled: true
+  fsGroup: 999
+  fsGroupChangePolicy: "OnRootMismatch"
+
+containerSecurityContext:
+  enabled: true
+  runAsUser: 999
+  runAsGroup: 999
+  allowPrivilegeEscalation: false
+```
+
+### Why this is needed
+
+MongoDB stores its database files under `/data/db`. This path is backed by a PersistentVolumeClaim.
+
+Different Kubernetes storage classes may mount newly created volumes with different ownership and permissions. Some storage classes create permissive volumes that a non-root container can write to immediately. Other storage classes mount the volume as `root:root` with restrictive permissions.
+
+If MongoDB cannot write to `/data/db`, the pod may fail during startup with an error similar to:
+
+```text
+Error creating journal directory
+directory="/data/db/journal"
+error="Permission denied"
+```
+
+The `fsGroup` setting makes the mounted data volume accessible to the MongoDB group. Without it, a volume that is owned by `root:root` may not be writable by the MongoDB process.
+
+### Pod security context
+
+The pod-level security context is used for volume access:
+
+```yaml
+podSecurityContext:
+  enabled: true
+  fsGroup: 999
+  fsGroupChangePolicy: "OnRootMismatch"
+```
+
+`fsGroup: 999` tells Kubernetes that mounted volumes should be accessible to filesystem group `999`.
+
+This is important for the MongoDB data volume. The MongoDB container runs as group `999`, so the data volume must be writable by that group.
+
+`fsGroupChangePolicy: "OnRootMismatch"` avoids unnecessary recursive ownership changes when the volume root already has the expected ownership. This is useful for database volumes, because recursive permission changes on large PVCs can slow down pod startup.
+
+### Container security context
+
+The MongoDB container security context is:
+
+```yaml
+containerSecurityContext:
+  enabled: true
+  runAsUser: 999
+  runAsGroup: 999
+  allowPrivilegeEscalation: false
+```
+
+`runAsUser: 999` runs the MongoDB process as the `mongodb` user.
+
+`runAsGroup: 999` runs the MongoDB process with the `mongodb` group as its primary group.
+
+`allowPrivilegeEscalation: false` prevents the MongoDB process from gaining additional privileges inside the container.
+
+### Do not normally change these values
+
+For the current chart image, `mongo:8.0.12`, the MongoDB user and group are expected to be UID/GID `999`.
+
+These values should normally be left unchanged:
+
+```yaml
+fsGroup: 999
+runAsUser: 999
+runAsGroup: 999
+```
+
+Only change them if you deliberately switch to a different MongoDB image that uses another UID/GID.
+
+If the image is changed, verify the expected UID/GID before changing these settings. For example:
+
+```bash
+kubectl run --stdin --tty --rm --image <mongo-image>:<tag> mongo-id-test --restart Never -- sh
+id mongodb
+```
+
+The `fsGroup`, `runAsUser`, and `runAsGroup` values should match the MongoDB user/group used by the selected image.
+
+### Init containers
+
+This chart may use an initContainer to prepare the MongoDB keyfile before the main MongoDB container starts.
+
+The pod-level `fsGroup` setting does not make the initContainer run as UID `999`. It only affects filesystem group handling for mounted volumes.
+
+The initContainer may still run as root when it needs to copy the keyfile, change ownership, or adjust permissions before MongoDB starts.
+
+The main MongoDB container should remain non-root.
+
+### Storage class notes
+
+This chart should not rely on a storage class creating world-writable volumes.
+
+A permissive storage class may appear to work without `fsGroup`, but a stricter storage class may fail with `Permission denied` when MongoDB tries to create `/data/db/journal`.
+
+Keeping `fsGroup: 999` enabled makes the chart more portable across storage classes such as `local-path`, iSCSI-backed CSI volumes, and other dynamically provisioned PVCs.
+
+### Troubleshooting permissions
+
+To check the mounted data volume permissions, inspect the pod or use a temporary debug pod with the same UID/GID as MongoDB:
+
+```yaml
+securityContext:
+  runAsUser: 999
+  runAsGroup: 999
+```
+
+If that pod cannot create a file or directory on the mounted PVC, the volume is not writable by the MongoDB user/group.
+
+Then test again with:
+
+```yaml
+securityContext:
+  runAsUser: 999
+  runAsGroup: 999
+  fsGroup: 999
+  fsGroupChangePolicy: "OnRootMismatch"
+```
+
+If the second test works, the storage class requires `fsGroup` for non-root workloads.
+
+
 ## Connection Examples
 
 MongoDB in namespace `mongodb`, Graylog in namespace `graylog`:

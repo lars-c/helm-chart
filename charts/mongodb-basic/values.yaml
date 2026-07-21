@@ -43,8 +43,18 @@ podAnnotations: {}
 # This is for setting Kubernetes Labels to a Pod.
 podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# This is for setting Kubernetes Security Context to a Pod.
+podSecurityContext:
+  enabled: true
+  fsGroup: 999
+  fsGroupChangePolicy: "OnRootMismatch"
+
+# This is for setting Kubernetes Security Context to a Container.
+containerSecurityContext:
+  enabled: true   
+  runAsUser: 999
+  runAsGroup: 999
+  allowPrivilegeEscalation: false
 
 securityContext: {}
   # capabilities:
@@ -162,5 +172,5 @@ persistence:
   accessModes:
     - ReadWriteOnce
   # Specify a storage class or set to null to override the default storage class
-  storageClass: "local-path"
+  storageClass: "iscsi-sulaco"
   size: 1Gi
