@@ -164,8 +164,15 @@ tolerations:
 networkPolicy:
   enabled: true
   allowedNamespace: graylog
-  allowedPodLabels:
-    graylog-mongodb-client: "true"
+
+  graylogClient:
+    namespace: graylog
+    podLabels:
+      graylog-mongodb-client: "true"
+
+  backupClient:
+    podLabels:
+      mongodb-backup-client: "true"    
 
 # Persistent Volume Claim Template configuration
 persistence:

@@ -28,7 +28,18 @@ spec:
               kubernetes.io/metadata.name: {{ .Values.networkPolicy.allowedNamespace | quote }}
           podSelector:
             matchLabels:
-{{- range $key, $value := .Values.networkPolicy.allowedPodLabels }}
+{{- range $key, $value := .Values.networkPolicy.graylogClient.podLabels }}
+              {{ $key }}: {{ $value | quote }}
+{{- end }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.service.port }}
+
+    # MongoDB backup access from the MongoDB namespace
+    - from:
+        - podSelector:
+            matchLabels:
+{{- range $key, $value := .Values.networkPolicy.backupClient.podLabels }}
               {{ $key }}: {{ $value | quote }}
 {{- end }}
       ports:
