@@ -5,17 +5,18 @@
 #### CronJob
 ```console
 mongodump cronjob for a MongoDB StatefulSet
-NFS for backup target
 Image (custom): ghcr.io/lars-c/mongodb-tools:100.13.0 (Ubuntu 24.04 with MongoDB Database Tools version 100.13.0 installed)
+Include users
+NFS for backup target
 
 Source: 
-mongoHost: "mongo-service.dok1.svc.cluster.local"
-auth.rootUsername: "admin"
-auth.rootPassword: "SecurePassword123"
+Mongodb host: mongoHost
+root username: auth.rootUsername
+root password: auth.rootPassword
 
 Target NFS config
-nfs.server: 192.168.1.25
-nfs.path: /var/nfs/backup
+nfs server: nfs.server
+nfs path: nfs.path
 
 ```
 #### source
@@ -23,21 +24,11 @@ nfs.path: /var/nfs/backup
 /srv/github/node/stateful/mongodb-backup/
 
 ```
-#### Values
+#### Backup schedule
 ```console
-auth:
-  rootUsername: "admin"
-  rootPassword: "SecurePassword123"
 
-mongoHost: "mongo-service.dok1.svc.cluster.local"  
-
-backup:
-  schedule: "*/5 * * * *" # Runs backup every five minutes
-  retentionDays: 14       # Retention days for backup files
-
-nfs:
-  server: 192.168.1.25
-  path: /var/nfs/backup
+schedule: backup.schedule ()"*/5 * * * *" # Runs backup every five minutes)
+retention: backup.retentionDays       # Retention days for backup files
 
 ```
 #### Secret and connect string

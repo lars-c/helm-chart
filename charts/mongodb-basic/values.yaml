@@ -56,14 +56,6 @@ containerSecurityContext:
   runAsGroup: 999
   allowPrivilegeEscalation: false
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
 # StatefulSet service name
 # Must match the service name in the Service definition
 serviceName: "mongo-service"
@@ -160,19 +152,20 @@ tolerations:
     value: "orange"
     effect: "NoSchedule"
 
-# NetworkPolicy for pod assignment
+# NetworkPolicy configuration for MongoDB client access
 networkPolicy:
   enabled: true
-  allowedNamespace: graylog
 
   graylogClient:
+    enabled: true
     namespace: graylog
     podLabels:
       graylog-mongodb-client: "true"
 
   backupClient:
+    enabled: true
     podLabels:
-      mongodb-backup-client: "true"    
+      mongodb-backup-client: "true" 
 
 # Persistent Volume Claim Template configuration
 persistence:

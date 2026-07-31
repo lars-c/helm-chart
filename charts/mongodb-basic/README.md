@@ -56,9 +56,17 @@ auth:
 
 networkPolicy:
   enabled: true
-  allowedNamespace: graylog
-  allowedPodLabels:
-    graylog-mongodb-client: "true"
+
+  graylogClient:
+    enabled: true
+    namespace: graylog
+    podLabels:
+      graylog-mongodb-client: "true"
+
+  backupClient:
+    enabled: true
+    podLabels:
+      mongodb-backup-client: "true"
 
 persistence:
   storageClass: local-path
@@ -95,15 +103,102 @@ mongodb-0.mongo-service.mongodb.svc.cluster.local
 
 ## NetworkPolicy
 
-When `networkPolicy.enabled` is true, the chart creates an ingress-only
-NetworkPolicy for MongoDB pods. It allows:
+When `networkPolicy.enabled` is `true`, the chart creates an ingress-only
+NetworkPolicy for MongoDB pods. When it is `false`, the chart creates no
+NetworkPolicy. Disabling it means this chart no longer restricts ingress traffic
+to MongoDB; actual exposure then depends on other policies in the cluster.
+
+With the default values, the NetworkPolicy allows:
 
 - MongoDB pod-to-pod traffic on TCP/27017 for replica-set communication
-- Graylog pods on TCP/27017 when they are in `networkPolicy.allowedNamespace`
-  and have the labels from `networkPolicy.allowedPodLabels`
+- Graylog pods on TCP/27017 only when they are in the `graylog` namespace and
+  have `graylog-mongodb-client: "true"`
+- Backup pods on TCP/27017 only when they are in the MongoDB namespace and have
+  `mongodb-backup-client: "true"`
 
-The Graylog namespace selector and pod selector are in the same `from` item, so
-both must match.
+The Graylog and backup clients produce separate ingress rules. They are
+alternative access paths: Graylog access OR backup access. A pod does not need
+both client labels. Both client paths permit access only to MongoDB TCP port
+27017 with the default service configuration.
+
+### Graylog Client Rule
+
+Set `networkPolicy.graylogClient.enabled` to `true` to create the Graylog client
+ingress path. Set it to `false` to omit the Graylog-specific ingress rule.
+
+`networkPolicy.graylogClient.namespace` identifies the namespace containing the
+permitted Graylog pods. The namespace selector and pod selector are part of the
+same peer, so both must match. With the default values, the source pod must be in
+the `graylog` namespace.
+
+The source pod must also contain every label configured under
+`networkPolicy.graylogClient.podLabels`. Multiple entries are AND conditions,
+so the pod must match all of them. By default, the required label is:
+
+```yaml
+graylog-mongodb-client: "true"
+```
+
+Put the label on the actual Graylog pod template, not only on higher-level
+Deployment, StatefulSet, HelmRelease, or other resource metadata.
+
+### Backup Client Rule
+
+Set `networkPolicy.backupClient.enabled` to `true` to create the MongoDB backup
+client ingress path. Set it to `false` to omit the backup-specific ingress rule.
+
+The backup rule intentionally has no namespace selector. A pod matching
+`networkPolicy.backupClient.podLabels` is therefore permitted only when it is in
+the same namespace as the MongoDB NetworkPolicy. A backup CronJob installed in
+another namespace is not permitted by this rule, even if its pod has the correct
+label. With the default values, the backup pod must have:
+
+```yaml
+mongodb-backup-client: "true"
+```
+
+For a CronJob, put this label under
+`spec.jobTemplate.spec.template.metadata.labels` so that it is applied to the
+pods the CronJob creates:
+
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongodb-backup
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            mongodb-backup-client: "true"
+        spec:
+          # Backup pod configuration goes here.
+```
+
+Multiple entries in `networkPolicy.backupClient.podLabels` are AND conditions;
+the backup pod must match all of them.
+
+If backup access is not required, disable that path while leaving the overall
+NetworkPolicy enabled:
+
+```yaml
+networkPolicy:
+  enabled: true
+  backupClient:
+    enabled: false
+```
+
+### Client Selector Validation
+
+When either client is enabled, its `podLabels` map must contain at least one
+label. Helm rendering intentionally fails with a clear error if an enabled
+client has missing or empty `podLabels`. This prevents an empty pod selector
+from unintentionally allowing every pod in the selected namespace.
+
+Do not empty a client's labels to turn off its access path. Set that client's
+`enabled` value to `false` instead.
 
 NetworkPolicy is not a replacement for MongoDB credentials. Keep authentication
 enabled and use NetworkPolicy as an extra boundary.
