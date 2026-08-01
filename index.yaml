@@ -3,6 +3,20 @@ entries:
   busybox:
   - apiVersion: v2
     appVersion: 1.37.0
+    created: "2026-08-01T07:37:53.599221408Z"
+    description: A test chart for busybox
+    digest: 2b525b33e6c36206230b61dd9f963c1d325833b049908fb368d1f40fe5bc5194
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/busybox96-00.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: busybox
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/busybox-0.1.7/busybox-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.37.0
     created: "2026-06-09T08:40:54.248092492Z"
     description: A test chart for busybox
     digest: 942c26149e65d970e968c67cc8598d930486301005212b9eb5c9c63c51ded5d2
@@ -1178,6 +1192,20 @@ entries:
   mongodb-backup:
   - apiVersion: v2
     appVersion: 8.0.12
+    created: "2026-08-01T07:37:53.720248382Z"
+    description: CronJob backup for MongoDB(R)
+    digest: 7b3972b49082ca017a43d7b3f74050c3ea4b6baf6d3be02073038dabde18b652
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/mongodb128.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: mongodb-backup
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/mongodb-backup-0.1.8/mongodb-backup-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 8.0.12
     created: "2025-10-02T08:25:54.331122972Z"
     description: CronJob backup for MongoDB(R)
     digest: 2de4fd2dbffcb7fb35ffdfdf8cf12ae60fcbe258b3e108d89349609ab4826ae8
@@ -1597,4 +1625,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-29T13:24:55.203658354Z"
+generated: "2026-08-01T07:37:53.720487209Z"
