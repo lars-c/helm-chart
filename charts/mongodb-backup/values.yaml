@@ -56,12 +56,6 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
 # CronJob schedule and retention days
 backup:
   schedule: "*/5 * * * *" # Runs backup every five minutes
@@ -76,8 +70,8 @@ mountOptions:
 
 # NFS server configuration
 nfs:
-  server: 192.168.1.116
-  path: /mnt/tank/nfs
+  server: 192.168.5.17
+  path: /var/nfs/backup
 
 # Persistent Volume Claim Template configuration
 persistence:

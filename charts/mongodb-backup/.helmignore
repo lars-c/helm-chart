@@ -21,3 +21,12 @@
 .idea/
 *.tmproj
 .vscode/
+
+# Codex instructions; version-controlled but not part of the Helm chart
+/AGENTS.md
+
+# Development notes; omit this if mongodb-backup.md should be packaged
+/mongodb-backup.md
+
+# The ignore file itself is not needed in the packaged chart
+/.helmignore
