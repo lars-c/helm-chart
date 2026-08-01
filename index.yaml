@@ -113,6 +113,26 @@ entries:
   joomla-basic:
   - apiVersion: v2
     appVersion: 6.0.0
+    created: "2026-08-01T07:49:01.778746474Z"
+    dependencies:
+    - name: common
+      repository: file://./charts/common
+      version: 1.0.0
+    - name: mysql
+      repository: file://./charts/mysql
+      version: 1.0.0
+    description: Joomla chart with automatic installer
+    digest: 9efbd7e9182328669d85294f8608694f6e024006aa78a2c80cb06ef9185025a0
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: joomla-basic
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/joomla-basic-0.4.5/joomla-basic-0.4.5.tgz
+    version: 0.4.5
+  - apiVersion: v2
+    appVersion: 6.0.0
     created: "2026-06-10T14:49:55.096491595Z"
     dependencies:
     - name: common
@@ -1639,4 +1659,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-01T07:42:57.736505852Z"
+generated: "2026-08-01T07:49:01.779102231Z"
