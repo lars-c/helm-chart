@@ -1651,6 +1651,20 @@ entries:
   offline-site:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2026-10-22T11:38:33.262262457Z"
+    description: Minimal static maintenance page
+    digest: 8b32f9519010e9209a3fd592f2c6302ca9c366a2041e17de6102a3fe33ad685a
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/offline-site128-0.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: offline-site
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/offline-site-0.1.1/offline-site-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2026-10-22T10:14:37.316124295Z"
     description: Minimal static maintenance page
     digest: 9a0ab0143f3cf2b91b82c9b1df53218dd2f7aad75149d74ffc41a708ea3d2d6e
@@ -1674,4 +1688,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-22T10:14:37.31635282Z"
+generated: "2026-10-22T11:38:33.262387553Z"
