@@ -70,7 +70,8 @@ mountOptions:
 
 # NFS server configuration
 nfs:
-  server: 192.168.5.17
+  # sulaco/192.168.5.116
+  server: 192.168.5.116
   path: /var/nfs/backup
 
 # Persistent Volume Claim Template configuration
