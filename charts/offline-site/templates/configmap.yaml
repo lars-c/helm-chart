@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+data:
+
+  default.conf: |
+    server {
+        listen 8080;
+        server_name _;
+
+        server_tokens off;
+
+        root /usr/share/nginx/html;
+
+        add_header Cache-Control "no-store" always;
+        add_header Retry-After "3600" always;
+
+        location = /healthz {
+            access_log off;
+            add_header Content-Type text/plain;
+            return 200 "ok\n";
+        }
+
+        location / {
+            error_page 503 /index.html;
+            return 503;
+        }
+
+        location = /index.html {
+            internal;
+        }
+    }
+
+  index.html: |
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Temporarily offline</title>
+      <style>
+        body {
+          font-family: sans-serif;
+          max-width: 700px;
+          margin: 10vh auto;
+          padding: 2rem;
+          line-height: 1.5;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Offline for now</h1>
+      <p>Thinking about it...</p>
+    </body>
+    </html>

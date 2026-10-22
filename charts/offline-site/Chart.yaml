@@ -1,0 +1,12 @@
+apiVersion: v2
+name: offline-site
+description: Minimal static maintenance page
+
+type: application
+version: 0.1.0
+appVersion: "1.0"
+
+icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+maintainers:
+- email: oss-maint@inetpub.dk
+  name: oss-maintainer

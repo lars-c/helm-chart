@@ -1,0 +1,24 @@
+# Default values for offline-site.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: nginxinc/nginx-unprivileged
+  tag: stable-alpine-slim
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+
+  # MetalLB IP here.
+  loadBalancerIP: ""
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 16Mi
+  limits:
+    cpu: 50m
+    memory: 32Mi
