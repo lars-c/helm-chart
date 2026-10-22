@@ -14,7 +14,7 @@ Chart metadata:
 | Field | Value |
 | --- | --- |
 | Chart name | `joomla-basic` |
-| Chart version | `0.4.3` |
+| Chart version | `0.4.4` |
 | App version | `6.0.0` |
 
 ## What this chart deploys
