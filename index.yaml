@@ -1648,6 +1648,21 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/nginx-chart-0.1.0/nginx-chart-0.1.0.tgz
     version: 0.1.0
+  offline-site:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2026-10-22T10:14:37.316124295Z"
+    description: Minimal static maintenance page
+    digest: 9a0ab0143f3cf2b91b82c9b1df53218dd2f7aad75149d74ffc41a708ea3d2d6e
+    icon: https://raw.githubusercontent.com/lars-c/helm-chart/main/icons/joomla128-00.png
+    maintainers:
+    - email: oss-maint@inetpub.dk
+      name: oss-maintainer
+    name: offline-site
+    type: application
+    urls:
+    - https://github.com/lars-c/helm-chart/releases/download/offline-site-0.1.0/offline-site-0.1.0.tgz
+    version: 0.1.0
   temp:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -1659,4 +1674,4 @@ entries:
     urls:
     - https://github.com/lars-c/helm-chart/releases/download/temp-0.1.0/temp-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-01T07:49:01.779102231Z"
+generated: "2026-10-22T10:14:37.31635282Z"
